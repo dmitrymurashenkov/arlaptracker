@@ -91,13 +91,17 @@
     </style>
     <script>
         var markerSizeMeters = 0.2;
-        var minMarkerDistanceMeters = 1;
+        var minMarkerDistanceMeters = 1.5;
         var minLapTimeSeconds = 5;
+        var vtxChannelName = 'R5';
 
-        var raceStarted = false;
+        var raceStartTime;
 
         var laps = [];
         var currentLapStartTime;
+
+        var videoRecordBlobs;
+        var mediaRecorder;
 
         function toMeters(value) {
             //Although a-frame declares to have all sizes in meters - actually they are in marker sizes
@@ -109,12 +113,16 @@
 
         AFRAME.registerComponent('listendistance', {
             init: function () {
-                this.text = document.querySelector("#finish-marker-distance");
 
                 var marker = this.el;
+
+                this.text = marker.querySelector(":scope > a-text");
+
                 marker.addEventListener('markerLost', function() {
-                    if (raceStarted) {
-                        if (toMeters(marker.object3D.position.length()) < minMarkerDistanceMeters) {
+                    if (raceStartTime) {
+                        let distanceToMarker = toMeters(marker.object3D.position.length());
+                        console.log('marker lost ' + distanceToMarker)
+                        if (distanceToMarker < minMarkerDistanceMeters) {
                             //We were close to marker - seems we've just finished our lap
                             let lapTimeSeconds = (new Date().getTime() - currentLapStartTime.getTime())/1000;
                             if (lapTimeSeconds > minLapTimeSeconds) {
@@ -146,6 +154,9 @@
             document.querySelector("#markerSizeMeters").value = markerSizeMeters;
             document.querySelector("#minMarkerDistanceMeters").value = minMarkerDistanceMeters;
             document.querySelector("#minLapTimeSeconds").value = minLapTimeSeconds;
+            document.querySelector("#vtxChannelName").value = vtxChannelName;
+
+            applySettings();
         });
 
         function applySettings() {
@@ -153,30 +164,121 @@
             var markerSizeMeters = document.querySelector("#markerSizeMeters").value;
             var minMarkerDistanceMeters = document.querySelector("#minMarkerDistanceMeters").value;
             var minLapTimeSeconds = document.querySelector("#minLapTimeSeconds").value;
+            var vtxChannelName = document.querySelector("#vtxChannelName").value;
+
+            var areas = document.querySelectorAll('a-marker > a-box');
+            for (var i=0; i < areas.length; i++) {
+                areas[i].setAttribute('width', minMarkerDistanceMeters/markerSizeMeters);
+                areas[i].setAttribute('height', minMarkerDistanceMeters/markerSizeMeters);
+                areas[i].setAttribute('depth', minMarkerDistanceMeters/markerSizeMeters);
+            }
         }
 
         function toggleRace() {
-            if (!raceStarted) {
-                raceStarted = true;
-                laps = [];
-                document.querySelector('.lap-times').innerHTML = '';
-                currentLapStartTime = new Date();
-                document.querySelector('.toggle-race-button').innerHTML = "Stop race";
-                document.querySelector('.toggle-race-button').style.background = "orange";
+            if (!raceStartTime) {
+                // startRecord(function () {
+                    raceStartTime = new Date();
+                    laps = [];
+
+                    document.querySelector('.lap-times').innerHTML = '';
+                    currentLapStartTime = new Date();
+                    document.querySelector('.toggle-race-button').innerHTML = "Stop race";
+                    document.querySelector('.toggle-race-button').style.background = "orange";
+                // });
             }
             else {
-                raceStarted = false;
+                // stopRecord();
+
+                raceStartTime = null;
                 currentLapStartTime = null;
                 document.querySelector('.toggle-race-button').innerHTML = "Start race";
                 document.querySelector('.toggle-race-button').style.background = "lightgreen";
             }
         }
+
+        // function startRecord(callback) {
+        //     var displayMediaOptions = {
+        //         video: {
+        //             cursor: "never"
+        //         },
+        //         audio: false
+        //     };
+        //
+        //     navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
+        //         .catch(err => { console.error("Error:" + err); return null; })
+        //         .then(function(stream) {
+        //             videoRecordBlobs = [];
+        //
+        //             let recordStartTime = new Date();
+        //
+        //             function buildRecordingOptions() {
+        //                 let options = {mimeType: 'video/webm;codecs=vp9,opus'};
+        //                 if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        //                     console.error(`${options.mimeType} is not supported`);
+        //                     options = {mimeType: 'video/webm;codecs=vp8,opus'};
+        //                     if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        //                         console.error(`${options.mimeType} is not supported`);
+        //                         options = {mimeType: 'video/webm'};
+        //                         if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        //                             console.error(`${options.mimeType} is not supported`);
+        //                             options = {mimeType: ''};
+        //                         }
+        //                     }
+        //                 }
+        //                 return options;
+        //             }
+        //
+        //             var options = buildRecordingOptions();
+        //             try {
+        //                 mediaRecorder = new MediaRecorder(stream, options);
+        //             } catch (e) {
+        //                 console.error('Exception while creating MediaRecorder:', e);
+        //                 errorMsgElement.innerHTML = `Exception while creating MediaRecorder: ${JSON.stringify(e)}`;
+        //                 return;
+        //             }
+        //
+        //             function saveRecordedBlob(event) {
+        //                 console.log('handleDataAvailable', event);
+        //                 if (event.data.size > 0) {
+        //                     videoRecordBlobs.push(event.data);
+        //                     saveRecordToFile();
+        //                 }
+        //             }
+        //
+        //             function saveRecordToFile() {
+        //                 var blob = new Blob(videoRecordBlobs, {
+        //                     type: "video/webm"
+        //                 });
+        //                 var url = URL.createObjectURL(blob);
+        //                 var a = document.createElement("a");
+        //                 document.body.appendChild(a);
+        //                 a.style = "display: none";
+        //                 a.href = url;
+        //                 a.download = "race-" + vtxChannelName + "-" + recordStartTime.toISOString() + ".webm";
+        //                 a.click();
+        //                 window.URL.revokeObjectURL(url);
+        //             }
+        //
+        //             mediaRecorder.ondataavailable = saveRecordedBlob;
+        //             mediaRecorder.start();
+        //
+        //             callback();
+        //         });
+        // }
+        //
+        // function stopRecord() {
+        //     if (mediaRecorder) {
+        //         mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        //         mediaRecorder.stop();
+        //         mediaRecorder = null;
+        //     }
+        // }
     </script>
 </head>
 <body>
 <div>
     <!-- At the moment video viewport can't be resized in AR.js https://github.com/AR-js-org/AR.js/issues/15 -->
-    <a-scene embedded arjs='detectionMode: mono_and_matrix; matrixCodeType: 3x3_HAMMING63;'>
+    <a-scene stats arjs='detectionMode: mono_and_matrix; matrixCodeType: 3x3_HAMMING63;'>
         <a-marker id="finish-marker" type="barcode" value="0" size="1" listendistance>
 
             <a-box color="blue" depth="1" height="1" width="1" opacity="0.5"></a-box>
@@ -208,6 +310,11 @@
             <div class="settings-name">Min lap time:</div>
             <input id="minLapTimeSeconds" type="text" value="5" size="4" oninput="applySettings()">
             <div class="settings-units"> seconds</div>
+        </div>
+
+        <div class="setting">
+            <div class="settings-name">VTX channel name:</div>
+            <input id="vtxChannelName" type="text" value="R5" size="4" oninput="applySettings()">
         </div>
 
         <div class="toggle-race-button" onclick="toggleRace()">Start race</div>
