@@ -2,7 +2,9 @@
 <head>
     <title>AR Lap Tracker</title>
     <script src="https://aframe.io/releases/1.1.0/aframe.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+<!--    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>-->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+
     <!-- Add billboard a-frame component to have text labels face camera at all times -->
     <script src="https://rawgit.com/blairmacintyre/aframe-look-at-billboard-component/master/dist/aframe-look-at-billboard-component.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
@@ -71,22 +73,62 @@
             margin-bottom: 30px;
         }
 
-        .lap {
-            margin: 10px;
+        .laps-column-label {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            width: 100px;
+            border-bottom: dashed 1px black;
         }
 
         .lap-number {
             font-family: 'Roboto', sans-serif;
+            font-weight: 600;
             font-size: 18px;
-            display: inline-block;
             width: 100px;
+            text-align: center;
         }
 
         .lap-time {
             font-family: 'Roboto', sans-serif;
+            font-weight: 400;
             font-size: 18px;
-            display: inline-block;
-            width: 200px;
+            width: 100px;
+            text-align: center;
+        }
+
+        .lap-split {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 300;
+            opacity: 0.8;
+            font-size: 18px;
+            width: 100px;
+            text-align: center;
+        }
+
+        .help {
+            margin-left: 15px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 18px;
+            text-decoration: underline;
+            color: blue;
+        }
+
+        .help-modal {
+            display: none;
+            position: absolute;
+            z-index: 1;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+            padding: 20px 50px;
+            overflow: auto; /* Enable scroll if needed */
+            font-family: 'Roboto', sans-serif;
+            font-size: 18px;
+            max-width: 800px;
+            box-shadow: 10px 5px 15px rgba(0, 0, 0, .2);
         }
     </style>
     <script>
@@ -124,21 +166,24 @@
                         console.log('marker lost ' + distanceToMarker)
                         if (distanceToMarker < minMarkerDistanceMeters) {
                             //We were close to marker - seems we've just finished our lap
-                            let lapTimeSeconds = (new Date().getTime() - currentLapStartTime.getTime())/1000;
+                            let split = new Date();
+                            let lapTimeSeconds = (split.getTime() - currentLapStartTime.getTime())/1000;
                             if (lapTimeSeconds > minLapTimeSeconds) {
                                 laps.push(lapTimeSeconds);
                                 console.log('Lap finished ' + lapTimeSeconds)
                                 currentLapStartTime = new Date();
 
-                                var lapsDiv = document.querySelector('.lap-times');
+                                var lapsTable = document.querySelector('.lap-times > tbody');
 
-                                lapsDiv.innerHTML +=
-                                    '        <div class="lap">\n' +
-                                    '            <div class="lap-number">Lap ' + laps.length + '</div>\n' +
-                                    '            <div class="lap-time">' + + lapTimeSeconds + '</div>\n' +
-                                    '        </div>'
+                                lapsTable.innerHTML +=
+                                    '<tr class="laps-table-data-row">\n' +
+                                    '   <td class="lap-number">' + laps.length + '</td>\n' +
+                                    '   <td class="lap-time">' + lapTimeSeconds + '</td>\n' +
+                                    '   <td class="lap-split">' + (split.getTime() - raceStartTime.getTime())/1000 + '</td>\n' +
+                                    '</tr>';
 
                                 document.querySelector('#lap-finished-audio').play();
+
                             }
                         }
                     }
@@ -176,18 +221,22 @@
 
         function toggleRace() {
             if (!raceStartTime) {
-                // startRecord(function () {
+                startRecord(function () {
                     raceStartTime = new Date();
                     laps = [];
 
-                    document.querySelector('.lap-times').innerHTML = '';
+                    var lapTableRows = document.querySelectorAll('.laps-table-data-row');
+                    for (let i = 0; i < lapTableRows.length; i++) {
+                        lapTableRows[i].remove();
+                    }
+
                     currentLapStartTime = new Date();
                     document.querySelector('.toggle-race-button').innerHTML = "Stop race";
                     document.querySelector('.toggle-race-button').style.background = "orange";
-                // });
+                });
             }
             else {
-                // stopRecord();
+                stopRecord();
 
                 raceStartTime = null;
                 currentLapStartTime = null;
@@ -196,90 +245,90 @@
             }
         }
 
-        // function startRecord(callback) {
-        //     var displayMediaOptions = {
-        //         video: {
-        //             cursor: "never"
-        //         },
-        //         audio: false
-        //     };
-        //
-        //     navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
-        //         .catch(err => { console.error("Error:" + err); return null; })
-        //         .then(function(stream) {
-        //             videoRecordBlobs = [];
-        //
-        //             let recordStartTime = new Date();
-        //
-        //             function buildRecordingOptions() {
-        //                 let options = {mimeType: 'video/webm;codecs=vp9,opus'};
-        //                 if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-        //                     console.error(`${options.mimeType} is not supported`);
-        //                     options = {mimeType: 'video/webm;codecs=vp8,opus'};
-        //                     if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-        //                         console.error(`${options.mimeType} is not supported`);
-        //                         options = {mimeType: 'video/webm'};
-        //                         if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-        //                             console.error(`${options.mimeType} is not supported`);
-        //                             options = {mimeType: ''};
-        //                         }
-        //                     }
-        //                 }
-        //                 return options;
-        //             }
-        //
-        //             var options = buildRecordingOptions();
-        //             try {
-        //                 mediaRecorder = new MediaRecorder(stream, options);
-        //             } catch (e) {
-        //                 console.error('Exception while creating MediaRecorder:', e);
-        //                 errorMsgElement.innerHTML = `Exception while creating MediaRecorder: ${JSON.stringify(e)}`;
-        //                 return;
-        //             }
-        //
-        //             function saveRecordedBlob(event) {
-        //                 console.log('handleDataAvailable', event);
-        //                 if (event.data.size > 0) {
-        //                     videoRecordBlobs.push(event.data);
-        //                     saveRecordToFile();
-        //                 }
-        //             }
-        //
-        //             function saveRecordToFile() {
-        //                 var blob = new Blob(videoRecordBlobs, {
-        //                     type: "video/webm"
-        //                 });
-        //                 var url = URL.createObjectURL(blob);
-        //                 var a = document.createElement("a");
-        //                 document.body.appendChild(a);
-        //                 a.style = "display: none";
-        //                 a.href = url;
-        //                 a.download = "race-" + vtxChannelName + "-" + recordStartTime.toISOString() + ".webm";
-        //                 a.click();
-        //                 window.URL.revokeObjectURL(url);
-        //             }
-        //
-        //             mediaRecorder.ondataavailable = saveRecordedBlob;
-        //             mediaRecorder.start();
-        //
-        //             callback();
-        //         });
-        // }
-        //
-        // function stopRecord() {
-        //     if (mediaRecorder) {
-        //         mediaRecorder.stream.getTracks().forEach(track => track.stop());
-        //         mediaRecorder.stop();
-        //         mediaRecorder = null;
-        //     }
-        // }
+        function startRecord(callback) {
+            var displayMediaOptions = {
+                video: {
+                    cursor: "never"
+                },
+                audio: false
+            };
+
+            navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
+                .catch(err => { console.error("Error:" + err); return null; })
+                .then(function(stream) {
+                    videoRecordBlobs = [];
+
+                    let recordStartTime = new Date();
+
+                    function buildRecordingOptions() {
+                        let options = {mimeType: 'video/webm;codecs=vp9,opus'};
+                        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                            console.error(`${options.mimeType} is not supported`);
+                            options = {mimeType: 'video/webm;codecs=vp8,opus'};
+                            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                                console.error(`${options.mimeType} is not supported`);
+                                options = {mimeType: 'video/webm'};
+                                if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                                    console.error(`${options.mimeType} is not supported`);
+                                    options = {mimeType: ''};
+                                }
+                            }
+                        }
+                        return options;
+                    }
+
+                    var options = buildRecordingOptions();
+                    try {
+                        mediaRecorder = new MediaRecorder(stream, options);
+                    } catch (e) {
+                        console.error('Exception while creating MediaRecorder:', e);
+                        errorMsgElement.innerHTML = `Exception while creating MediaRecorder: ${JSON.stringify(e)}`;
+                        return;
+                    }
+
+                    function saveRecordedBlob(event) {
+                        console.log('handleDataAvailable', event);
+                        if (event.data.size > 0) {
+                            videoRecordBlobs.push(event.data);
+                            saveRecordToFile();
+                        }
+                    }
+
+                    function saveRecordToFile() {
+                        var blob = new Blob(videoRecordBlobs, {
+                            type: "video/webm"
+                        });
+                        var url = URL.createObjectURL(blob);
+                        var a = document.createElement("a");
+                        document.body.appendChild(a);
+                        a.style = "display: none";
+                        a.href = url;
+                        a.download = "race-" + vtxChannelName + "-" + recordStartTime.toISOString() + ".webm";
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    }
+
+                    mediaRecorder.ondataavailable = saveRecordedBlob;
+                    mediaRecorder.start();
+
+                    callback();
+                });
+        }
+
+        function stopRecord() {
+            if (mediaRecorder) {
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                mediaRecorder.stop();
+                mediaRecorder = null;
+            }
+        }
     </script>
 </head>
 <body>
 <div>
     <!-- At the moment video viewport can't be resized in AR.js https://github.com/AR-js-org/AR.js/issues/15 -->
-    <a-scene stats arjs='detectionMode: mono_and_matrix; matrixCodeType: 3x3_HAMMING63;'>
-        <a-marker id="finish-marker" type="barcode" value="0" size="1" listendistance>
+    <a-scene arjs='detectionMode: mono_and_matrix; matrixCodeType: 4x4_BCH_13_9_3;' vr-mode-ui="enabled: false;">
+        <a-marker id="finish-marker" type="barcode" value="22" size="1" listendistance>
 
             <a-box color="blue" depth="1" height="1" width="1" opacity="0.5"></a-box>
             <a-text id="finish-marker-distance" showdistance value="Hello world" font="roboto" width="10" transparent="false" billboard></a-text>
@@ -317,16 +366,72 @@
             <input id="vtxChannelName" type="text" value="R5" size="4" oninput="applySettings()">
         </div>
 
-        <div class="toggle-race-button" onclick="toggleRace()">Start race</div>
+        <table style="margin: auto">
+            <tr>
+                <td><div class="toggle-race-button" onclick="toggleRace()">Start race</div></td>
+                <td><div class="help" onclick="document.querySelector('.help-modal').style.display='block'">Help</div></td>
+            </tr>
+        </table>
+
     </div>
+
 
     <div class="laps">
         <div class="laps-header">Laps:</div>
 
-        <div class="lap-times">
-
-        </div>
+        <table class="lap-times">
+            <tr class="laps-table-header-row">
+                <th class="laps-column-label">Lap</th>
+                <th class="laps-column-label">Time</th>
+                <th class="laps-column-label">Split</th>
+            </tr>
+        </table>
     </div>
 </div>
+
+<div class="help-modal" onclick="document.querySelector('.help-modal').style.display='none'">
+
+    <div class="help-content">
+        <b>AR lap tracker</b>
+
+        <p>AR lap tracker is a web tool for tracking laps in FPV drone racing by marking finish line with AR markers/QR codes
+            and recognizing them in VTX video feed. You'll need USB OTG 5.8Ghz video receiver to use it.</p>
+
+        <b>How to use</b>
+
+        <p>Print following marker on A4 paper and place it near the finish line.</p>
+        <img src="markers/4x4_bch_13_9_3-22.png" width="100px" height="100px">
+
+        <p>Connect USB OTG video receiver to your PC - it automatically acts as an ordinary webcam.</p>
+
+        <p>Input the size of marker - the length of black square's side in meters, on A4 it's
+        usually about 18-20cm, so input 0.2.</p>
+
+        <p>When drone is near the marker and marker goes out of sight - the app assumes that pilot passed the finish
+        gate. Configure this distance threshold. Note that some cameras have narrow FOV and can't see marker when they
+        are too close to it.</p>
+
+        <p>Set min lap time to ignore cases when pilot got stuck near the finish gate for some time.</p>
+
+        <p>Press Start race button - the app asks you to record screen first. It is a nice feature in case you ran into
+        problems during the race - you can always go through the record manually later. After you've selected the screen
+        to capture - the race starts and you can take off.</p>
+
+        <p>When drone passes near the marker facing it - a lap should be recorded and shown in the app.</p>
+
+        <b>Calibration</b>
+
+        <p>Before starting the race you can power your drone and point it to the marker - the app should show a blue
+        box where it detects the marker and distance to it.</p>
+
+        <p>If you don't see the box - make sure your marker is clearly visible through the camera and sheet of paper is
+        not bent - it should be straight. Marker rotation over any axis doesn't matter.</p>
+
+        <p>If show distance to marker is incorrect - make sure you've set marker size in settings.</p>
+
+    </div>
+
+</div>
+
 </body>
 </html>
