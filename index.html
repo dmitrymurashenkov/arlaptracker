@@ -206,10 +206,10 @@
 
         function applySettings() {
             //todo disable settings propagation during race
-            var markerSizeMeters = document.querySelector("#markerSizeMeters").value;
-            var minMarkerDistanceMeters = document.querySelector("#minMarkerDistanceMeters").value;
-            var minLapTimeSeconds = document.querySelector("#minLapTimeSeconds").value;
-            var vtxChannelName = document.querySelector("#vtxChannelName").value;
+            markerSizeMeters = document.querySelector("#markerSizeMeters").value;
+            minMarkerDistanceMeters = document.querySelector("#minMarkerDistanceMeters").value;
+            minLapTimeSeconds = document.querySelector("#minLapTimeSeconds").value;
+            vtxChannelName = document.querySelector("#vtxChannelName").value;
 
             var areas = document.querySelectorAll('a-marker > a-box');
             for (var i=0; i < areas.length; i++) {
