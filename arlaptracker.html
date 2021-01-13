@@ -3,6 +3,8 @@
     <title>AR Lap Tracker</title>
     <script src="https://aframe.io/releases/1.1.0/aframe.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <!-- Add billboard a-frame component to have text labels face camera at all times -->
+    <script src="https://rawgit.com/blairmacintyre/aframe-look-at-billboard-component/master/dist/aframe-look-at-billboard-component.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
     <style>
@@ -128,6 +130,7 @@
                                     '            <div class="lap-time">' + + lapTimeSeconds + '</div>\n' +
                                     '        </div>'
 
+                                document.querySelector('#lap-finished-audio').play();
                             }
                         }
                     }
@@ -146,6 +149,7 @@
         });
 
         function applySettings() {
+            //todo disable settings propagation during race
             var markerSizeMeters = document.querySelector("#markerSizeMeters").value;
             var minMarkerDistanceMeters = document.querySelector("#minMarkerDistanceMeters").value;
             var minLapTimeSeconds = document.querySelector("#minLapTimeSeconds").value;
@@ -171,16 +175,19 @@
 </head>
 <body>
 <div>
-<!-- At the moment video viewport can't be resized in AR.js https://github.com/AR-js-org/AR.js/issues/15 -->
-<a-scene embedded arjs='detectionMode: mono_and_matrix; matrixCodeType: 3x3_HAMMING63;'>
-    <a-marker id="finish-marker" type="barcode" value="0" size="1" listendistance>
-        <a-box color="blue" depth="1" height="1" width="1" opacity="0.5"></a-box>
-        <a-text id="finish-marker-distance" showdistance value="Hello world" font="roboto" width="10" transparent="false"></a-text>
+    <!-- At the moment video viewport can't be resized in AR.js https://github.com/AR-js-org/AR.js/issues/15 -->
+    <a-scene embedded arjs='detectionMode: mono_and_matrix; matrixCodeType: 3x3_HAMMING63;'>
+        <a-marker id="finish-marker" type="barcode" value="0" size="1" listendistance>
 
-    </a-marker>
+            <a-box color="blue" depth="1" height="1" width="1" opacity="0.5"></a-box>
+            <a-text id="finish-marker-distance" showdistance value="Hello world" font="roboto" width="10" transparent="false" billboard></a-text>
 
-    <a-entity camera></a-entity>
-</a-scene>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+    </a-scene>
+
+    <audio id="lap-finished-audio" src="sounds/lap-finished-ring.mp3"></audio>
 
     <div class="settings">
         <div class="settings-header">Settings:</div>
