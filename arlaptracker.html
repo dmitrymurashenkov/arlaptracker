@@ -1,0 +1,218 @@
+<html>
+<head>
+    <title>AR Lap Tracker</title>
+    <script src="https://aframe.io/releases/1.1.0/aframe.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        .settings {
+            background: rgba(255,255,255,0.6);
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+            padding: 10px;
+            width: 360px;
+        }
+
+        .setting {
+            margin: 10px;
+        }
+
+        .settings-header {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: 50px;
+            margin-bottom: 30px;
+        }
+
+        .settings-name {
+            font-family: 'Roboto', sans-serif;
+            font-size: 18px;
+            display: inline-block;
+            width: 200px;
+        }
+
+        .settings-units {
+            font-family: 'Roboto', sans-serif;
+            font-size: 18px;
+            display: inline-block;
+        }
+
+        .toggle-race-button {
+            border: 1px solid black;
+            font-family: 'Roboto', sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            text-align: center;
+            width: 100px;
+            padding: 10px;
+            margin: auto;
+            background-color: lightgreen;
+        }
+
+        .laps {
+            background: rgba(255,255,255,0.6);
+            position: absolute;
+            top: 350px;
+            left: 10px;
+            z-index: 10;
+            padding: 10px;
+            width: 360px;
+        }
+
+        .laps-header {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: 50px;
+            margin-bottom: 30px;
+        }
+
+        .lap {
+            margin: 10px;
+        }
+
+        .lap-number {
+            font-family: 'Roboto', sans-serif;
+            font-size: 18px;
+            display: inline-block;
+            width: 100px;
+        }
+
+        .lap-time {
+            font-family: 'Roboto', sans-serif;
+            font-size: 18px;
+            display: inline-block;
+            width: 200px;
+        }
+    </style>
+    <script>
+        var markerSizeMeters = 0.2;
+        var minMarkerDistanceMeters = 1;
+        var minLapTimeSeconds = 5;
+
+        var raceStarted = false;
+
+        var laps = [];
+        var currentLapStartTime;
+
+        function toMeters(value) {
+            //Although a-frame declares to have all sizes in meters - actually they are in marker sizes
+            //so we have to scale manually
+            //
+            //For simplicity we always round to 2 fraction digits
+            return (value*markerSizeMeters).toFixed(2);
+        }
+
+        AFRAME.registerComponent('listendistance', {
+            init: function () {
+                this.text = document.querySelector("#finish-marker-distance");
+
+                var marker = this.el;
+                marker.addEventListener('markerLost', function() {
+                    if (raceStarted) {
+                        if (toMeters(marker.object3D.position.length()) < minMarkerDistanceMeters) {
+                            //We were close to marker - seems we've just finished our lap
+                            let lapTimeSeconds = (new Date().getTime() - currentLapStartTime.getTime())/1000;
+                            if (lapTimeSeconds > minLapTimeSeconds) {
+                                laps.push(lapTimeSeconds);
+                                console.log('Lap finished ' + lapTimeSeconds)
+                                currentLapStartTime = new Date();
+
+                                var lapsDiv = document.querySelector('.lap-times');
+
+                                lapsDiv.innerHTML +=
+                                    '        <div class="lap">\n' +
+                                    '            <div class="lap-number">Lap ' + laps.length + '</div>\n' +
+                                    '            <div class="lap-time">' + + lapTimeSeconds + '</div>\n' +
+                                    '        </div>'
+
+                            }
+                        }
+                    }
+                });
+            },
+            tick: function(time, timeDelta) {
+                var distance = (this.el.object3D.position.length()*markerSizeMeters).toFixed(2);
+                this.text.setAttribute('value', distance + 'm');
+            }
+        });
+
+        window.addEventListener('load', (event) => {
+            document.querySelector("#markerSizeMeters").value = markerSizeMeters;
+            document.querySelector("#minMarkerDistanceMeters").value = minMarkerDistanceMeters;
+            document.querySelector("#minLapTimeSeconds").value = minLapTimeSeconds;
+        });
+
+        function applySettings() {
+            var markerSizeMeters = document.querySelector("#markerSizeMeters").value;
+            var minMarkerDistanceMeters = document.querySelector("#minMarkerDistanceMeters").value;
+            var minLapTimeSeconds = document.querySelector("#minLapTimeSeconds").value;
+        }
+
+        function toggleRace() {
+            if (!raceStarted) {
+                raceStarted = true;
+                laps = [];
+                document.querySelector('.lap-times').innerHTML = '';
+                currentLapStartTime = new Date();
+                document.querySelector('.toggle-race-button').innerHTML = "Stop race";
+                document.querySelector('.toggle-race-button').style.background = "orange";
+            }
+            else {
+                raceStarted = false;
+                currentLapStartTime = null;
+                document.querySelector('.toggle-race-button').innerHTML = "Start race";
+                document.querySelector('.toggle-race-button').style.background = "lightgreen";
+            }
+        }
+    </script>
+</head>
+<body>
+<div>
+<!-- At the moment video viewport can't be resized in AR.js https://github.com/AR-js-org/AR.js/issues/15 -->
+<a-scene embedded arjs='detectionMode: mono_and_matrix; matrixCodeType: 3x3_HAMMING63;'>
+    <a-marker id="finish-marker" type="barcode" value="0" size="1" listendistance>
+        <a-box color="blue" depth="1" height="1" width="1" opacity="0.5"></a-box>
+        <a-text id="finish-marker-distance" showdistance value="Hello world" font="roboto" width="10" transparent="false"></a-text>
+
+    </a-marker>
+
+    <a-entity camera></a-entity>
+</a-scene>
+
+    <div class="settings">
+        <div class="settings-header">Settings:</div>
+
+        <div class="setting">
+            <div class="settings-name">Marker size:</div>
+            <input id="markerSizeMeters" type="text" value="0.2" size="4" oninput="applySettings()">
+            <div class="settings-units"> meters</div>
+        </div>
+
+        <div class="setting">
+            <div class="settings-name">Lap finished when distance to marker less than:</div>
+            <input id="minMarkerDistanceMeters" type="text" value="1" size="4" oninput="applySettings()">
+            <div class="settings-units"> meters</div>
+        </div>
+
+        <div class="setting">
+            <div class="settings-name">Min lap time:</div>
+            <input id="minLapTimeSeconds" type="text" value="5" size="4" oninput="applySettings()">
+            <div class="settings-units"> seconds</div>
+        </div>
+
+        <div class="toggle-race-button" onclick="toggleRace()">Start race</div>
+    </div>
+
+    <div class="laps">
+        <div class="laps-header">Laps:</div>
+
+        <div class="lap-times">
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
