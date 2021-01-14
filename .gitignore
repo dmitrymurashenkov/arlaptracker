@@ -32,3 +32,5 @@ build/
 
 #Build packages
 *.deb
+
+video.web

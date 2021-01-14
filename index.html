@@ -117,6 +117,7 @@
         }
 
         .help-modal {
+            background: white;
             display: none;
             position: absolute;
             z-index: 1;
@@ -128,14 +129,15 @@
             font-family: 'Roboto', sans-serif;
             font-size: 18px;
             max-width: 800px;
+            max-height: 80%;
             box-shadow: 10px 5px 15px rgba(0, 0, 0, .2);
         }
     </style>
     <script>
-        var markerSizeMeters = 0.2;
+        var markerSizeMeters = 0.17;
         var minMarkerDistanceMeters = 1.5;
         var minLapTimeSeconds = 5;
-        var vtxChannelName = 'R5';
+        var pilotName = 'Pilot1';
 
         var raceStartTime;
 
@@ -199,7 +201,7 @@
             document.querySelector("#markerSizeMeters").value = markerSizeMeters;
             document.querySelector("#minMarkerDistanceMeters").value = minMarkerDistanceMeters;
             document.querySelector("#minLapTimeSeconds").value = minLapTimeSeconds;
-            document.querySelector("#vtxChannelName").value = vtxChannelName;
+            document.querySelector("#pilotName").value = pilotName;
 
             applySettings();
         });
@@ -209,7 +211,7 @@
             markerSizeMeters = document.querySelector("#markerSizeMeters").value;
             minMarkerDistanceMeters = document.querySelector("#minMarkerDistanceMeters").value;
             minLapTimeSeconds = document.querySelector("#minLapTimeSeconds").value;
-            vtxChannelName = document.querySelector("#vtxChannelName").value;
+            pilotName = document.querySelector("#pilotName").value;
 
             var areas = document.querySelectorAll('a-marker > a-box');
             for (var i=0; i < areas.length; i++) {
@@ -303,7 +305,7 @@
                         document.body.appendChild(a);
                         a.style = "display: none";
                         a.href = url;
-                        a.download = "race-" + vtxChannelName + "-" + recordStartTime.toISOString() + ".webm";
+                        a.download = "race-" + pilotName + "-" + recordStartTime.toISOString() + ".webm";
                         a.click();
                         window.URL.revokeObjectURL(url);
                     }
@@ -328,7 +330,14 @@
 <div>
     <!-- At the moment video viewport can't be resized in AR.js https://github.com/AR-js-org/AR.js/issues/15 -->
     <a-scene arjs='detectionMode: mono_and_matrix; matrixCodeType: 4x4_BCH_13_9_3;' vr-mode-ui="enabled: false;">
-        <a-marker id="finish-marker" type="barcode" value="22" size="1" listendistance>
+        <!--
+        For testing purposes we can record screen, put it to ./video.webm and load this page
+        with different marker settings to see if it enhances detection
+        -->
+    <!--<a-scene arjs='detectionMode: mono_and_matrix; matrixCodeType: 4x4_BCH_13_9_3; sourceType: video; sourceUrl: video.webm' vr-mode-ui="enabled: false;">-->
+
+        <!-- We took standard marker and generated pattern for it - seems pattern works a bit better than the marker itself! -->
+        <a-marker id="finish-marker" preset="pattern" type="pattern" url="markers/marker-4x4_bch_13_9_3-value-22.patt" listendistance>
 
             <a-box color="blue" depth="1" height="1" width="1" opacity="0.5"></a-box>
             <a-text id="finish-marker-distance" showdistance value="Hello world" font="roboto" width="10" transparent="false" billboard></a-text>
@@ -362,8 +371,8 @@
         </div>
 
         <div class="setting">
-            <div class="settings-name">VTX channel name:</div>
-            <input id="vtxChannelName" type="text" value="R5" size="4" oninput="applySettings()">
+            <div class="settings-name">Pilot name:</div>
+            <input id="pilotName" type="text" value="R5" size="4" oninput="applySettings()">
         </div>
 
         <table style="margin: auto">
@@ -400,12 +409,16 @@
         <b>How to use</b>
 
         <p>Print following marker on A4 paper and place it near the finish line.</p>
-        <img src="markers/4x4_bch_13_9_3-22.png" width="100px" height="100px">
+        <img src="markers/marker-4x4_bch_13_9_3-value-22.png" width="100px" height="100px">
+
+        <p>Use <a href="markers/marker-4x4_bch_13_9_3-value-22.pdf">this pdf</a> to print - marker MUST have white
+            margins around it, otherwise it would be difficult to recognize. Sometimes smaller marker is better
+            and in our tests black area 14x14cm worked well on A4 paper.</p>
 
         <p>Connect USB OTG video receiver to your PC - it automatically acts as an ordinary webcam.</p>
 
         <p>Input the size of marker - the length of black square's side in meters, on A4 it's
-        usually about 18-20cm, so input 0.2.</p>
+        usually about 17сm, so input 0.17.</p>
 
         <p>When drone is near the marker and marker goes out of sight - the app assumes that pilot passed the finish
         gate. Configure this distance threshold. Note that some cameras have narrow FOV and can't see marker when they
@@ -429,6 +442,11 @@
 
         <p>If show distance to marker is incorrect - make sure you've set marker size in settings.</p>
 
+        <b>Known issues</b>
+
+        <p>If recording is many minutes long it may consume all memory at the moment. Will be fixed later.</p>
+
+        <p>Currently tested only in Chrome browser.</p>
     </div>
 
 </div>
