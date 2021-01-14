@@ -4,6 +4,8 @@ Tracks lap times for FPV drone racing events by recognizing barcode markers in t
 
 Checkout [demo video](demo.webm).
 
+![Demo video preview here](demo.gif)
+
 Fully web-based. Latest release available at: https://dmitrymurashenkov.github.io/arlaptracker/
 
 You'll need connect USB OTG 5.8Ghz FPV video receiver to PC (it acts as an ordinary webcam), 
