@@ -6,12 +6,36 @@ body {
 .videos-panel {
     position: absolute;
     left: 420px;
-    top: 10px;
-    width: 500px;
+    /*width: 1500px;*/
+    max-width: 1500px;
+    top: 0;
 }
 
-.videos-panel > iframe {
+.videos-panel > div > iframe {
     border: none;
     box-shadow: 10px 5px 15px rgba(0, 0, 0, .5);
 }
 
+.pilot-video {
+    margin: 10px;
+    float: left;
+}
+
+.add-pilot-button {
+    width: 720px;
+    height: 576px;
+    margin: 10px;
+    background: rgba(255,255,255,0.2);
+    float: left;
+    box-shadow: 10px 5px 15px rgba(0, 0, 0, .5);
+}
+
+.plus {
+    display: table-cell;
+    width: 720px;
+    height: 576px;
+    font-size: 500px;
+    text-align: center;
+    vertical-align: middle;
+    color: rgba(0,0,0,0.5);
+}

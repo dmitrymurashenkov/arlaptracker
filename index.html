@@ -5,6 +5,7 @@
         <script src="main-settings.js"></script>
         <script src="main-record.js"></script>
         <script src="main-race.js"></script>
+        <script src="main.js"></script>
 
         <link rel="stylesheet" href="main.css"/>
         <link rel="stylesheet" href="main-settings.css"/>
@@ -115,9 +116,11 @@
 
 
         <div class="videos-panel">
-            <!-- VTX video is PAL which is 720x576 -->
-            <iframe src="video.html" width="720" height="576"></iframe>
-            <!--        <iframe src="index.html" width="720" height="576"></iframe>-->
+            <div class="pilot-video">
+                <!-- VTX video is PAL which is 720x576 -->
+                <iframe src="video.html" width="720" height="576"></iframe>
+            </div>
+            <div class="add-pilot-button" onclick="addPilot()"><div class="plus">+</div></div>
         </div>
     </body>
 </html>
