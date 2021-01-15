@@ -8,7 +8,10 @@
     <script src="https://rawgit.com/blairmacintyre/aframe-look-at-billboard-component/master/dist/aframe-look-at-billboard-component.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
-    <script src="arlaptracker.js"></script>
+    <script src="settings.js"></script>
+    <script src="record.js"></script>
+    <script src="race.js"></script>
+
     <link rel="stylesheet" href="settings.css"/>
     <link rel="stylesheet" href="laps.css"/>
     <link rel="stylesheet" href="help.css"/>
@@ -25,10 +28,10 @@
     <!--<a-scene arjs='detectionMode: mono_and_matrix; matrixCodeType: 4x4_BCH_13_9_3; sourceType: video; sourceUrl: video.webm' vr-mode-ui="enabled: false;">-->
 
         <!-- We took standard marker and generated pattern for it - seems pattern works a bit better than the marker itself! -->
-        <a-marker id="finish-marker" preset="pattern" type="pattern" url="markers/marker-4x4_bch_13_9_3-value-22.patt" listendistance>
+        <a-marker id="finish-marker" preset="pattern" type="pattern" url="markers/marker-4x4_bch_13_9_3-value-22.patt" showdistance finishmarker>
 
             <a-box color="blue" depth="1" height="1" width="1" opacity="0.5"></a-box>
-            <a-text id="finish-marker-distance" showdistance value="Hello world" font="roboto" width="10" transparent="false" billboard></a-text>
+            <a-text id="finish-marker-distance" value="Hello world" font="roboto" width="30" transparent="false" billboard></a-text>
 
         </a-marker>
 
