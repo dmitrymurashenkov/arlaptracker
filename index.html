@@ -44,6 +44,17 @@
         <div class="settings-panel-header">Settings:</div>
 
         <div class="setting-panel">
+            <div class="setting-name" style="width: 80px">Camera:</div>
+            <select id="cameraDevice" style="width: 250px" onchange="onCameraSelected()">
+            </select>
+        </div>
+
+        <div class="setting-panel">
+            <div class="setting-name">Pilot name:</div>
+            <input id="pilotName" type="text" value="R5" size="4" oninput="applySettings()">
+        </div>
+
+        <div class="setting-panel">
             <div class="setting-name">Marker size:</div>
             <input id="markerSizeMeters" type="text" value="0.2" size="4" oninput="applySettings()">
             <div class="setting-units"> meters</div>
@@ -59,11 +70,6 @@
             <div class="setting-name">Min lap time:</div>
             <input id="minLapTimeSeconds" type="text" value="5" size="4" oninput="applySettings()">
             <div class="setting-units"> seconds</div>
-        </div>
-
-        <div class="setting-panel">
-            <div class="setting-name">Pilot name:</div>
-            <input id="pilotName" type="text" value="R5" size="4" oninput="applySettings()">
         </div>
 
         <table style="margin: auto">
@@ -104,12 +110,12 @@
 
         <p>Use <a href="markers/marker-4x4_bch_13_9_3-value-22.pdf">this pdf</a> to print - marker MUST have white
             margins around it, otherwise it would be difficult to recognize. Sometimes smaller marker is better
-            and in our tests black area 14x14cm worked well on A4 paper.</p>
+            and in our tests black area 13x13cm also worked well on A4 paper.</p>
 
         <p>Connect USB OTG video receiver to your PC - it automatically acts as an ordinary webcam.</p>
 
-        <p>Input the size of marker - the length of black square's side in meters, on A4 it's
-        usually about 17сm, so input 0.17.</p>
+        <p>Input the size of marker - the length of black square's side in meters, on A4 from pdf it's
+        usually about 17cm, so input 0.17.</p>
 
         <p>When drone is near the marker and marker goes out of sight - the app assumes that pilot passed the finish
         gate. Configure this distance threshold. Note that some cameras have narrow FOV and can't see marker when they
