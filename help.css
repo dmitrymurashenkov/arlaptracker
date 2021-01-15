@@ -1,0 +1,24 @@
+.help-button {
+    margin-left: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    text-decoration: underline;
+    color: blue;
+}
+
+.help-panel {
+    background: white;
+    display: none;
+    position: absolute;
+    z-index: 100;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    padding: 20px 50px;
+    overflow: auto; /* Enable scroll if needed */
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    max-width: 800px;
+    max-height: 80%;
+    box-shadow: 10px 5px 15px rgba(0, 0, 0, .2);
+}

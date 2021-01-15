@@ -1,0 +1,45 @@
+.settings-panel {
+    background: rgba(255,255,255,0.6);
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    padding: 10px;
+    width: 360px;
+}
+
+.settings-panel-header {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 50px;
+    margin-bottom: 30px;
+}
+
+.setting-panel {
+    margin: 10px;
+}
+
+.setting-name {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    display: inline-block;
+    width: 200px;
+}
+
+.setting-units {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    display: inline-block;
+}
+
+.start-race-button {
+    border: 1px solid black;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    text-align: center;
+    width: 100px;
+    padding: 10px;
+    margin: auto;
+    background-color: lightgreen;
+}

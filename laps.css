@@ -1,0 +1,51 @@
+.laps-panel {
+    background: rgba(255,255,255,0.6);
+    position: absolute;
+    top: 350px;
+    left: 10px;
+    z-index: 10;
+    padding: 10px;
+    width: 360px;
+}
+
+.laps-panel-header {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 50px;
+    margin-bottom: 30px;
+}
+
+.laps-column-header {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+    width: 100px;
+    border-bottom: dashed 1px black;
+}
+
+.lap-number {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    width: 100px;
+    text-align: center;
+}
+
+.lap-time {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    width: 100px;
+    text-align: center;
+}
+
+.lap-split {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    opacity: 0.8;
+    font-size: 18px;
+    width: 100px;
+    text-align: center;
+}
