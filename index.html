@@ -1,152 +1,123 @@
 <html>
-<head>
-    <title>AR Lap Tracker</title>
-    <script src="https://aframe.io/releases/1.1.0/aframe.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    <head>
+        <title>AR Lap Tracker</title>
 
-    <!-- Add billboard a-frame component to have text labels face camera at all times -->
-    <script src="https://rawgit.com/blairmacintyre/aframe-look-at-billboard-component/master/dist/aframe-look-at-billboard-component.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+        <script src="main-settings.js"></script>
+        <script src="main-record.js"></script>
+        <script src="main-race.js"></script>
 
-    <script src="settings.js"></script>
-    <script src="record.js"></script>
-    <script src="race.js"></script>
+        <link rel="stylesheet" href="main.css"/>
+        <link rel="stylesheet" href="main-settings.css"/>
+        <link rel="stylesheet" href="main-laps.css"/>
+        <link rel="stylesheet" href="main-help.css"/>
 
-    <link rel="stylesheet" href="settings.css"/>
-    <link rel="stylesheet" href="laps.css"/>
-    <link rel="stylesheet" href="help.css"/>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    </head>
+    <body style="background-color: rgba(240,240,255,0.6)">
 
-</head>
-<body>
-<div>
-    <!-- At the moment video viewport can't be resized in AR.js https://github.com/AR-js-org/AR.js/issues/15 -->
-    <a-scene arjs='detectionMode: mono_and_matrix; matrixCodeType: 4x4_BCH_13_9_3;' vr-mode-ui="enabled: false;">
-        <!--
-        For testing purposes we can record screen, put it to ./video.webm and load this page
-        with different marker settings to see if it enhances detection
-        -->
-    <!--<a-scene arjs='detectionMode: mono_and_matrix; matrixCodeType: 4x4_BCH_13_9_3; sourceType: video; sourceUrl: video.webm' vr-mode-ui="enabled: false;">-->
+        <div class="settings-panel">
+            <div class="settings-panel-header">Settings:</div>
 
-        <!-- We took standard marker and generated pattern for it - seems pattern works a bit better than the marker itself! -->
-        <a-marker id="finish-marker" preset="pattern" type="pattern" url="markers/marker-4x4_bch_13_9_3-value-22.patt" showdistance finishmarker>
+            <div class="setting-panel">
+                <div class="setting-name">Marker size:</div>
+                <input id="markerSizeMeters" type="text" value="0.2" size="4" oninput="applySettings()">
+                <div class="setting-units"> meters</div>
+            </div>
 
-            <a-box color="blue" depth="1" height="1" width="1" opacity="0.5"></a-box>
-            <a-text id="finish-marker-distance" value="Hello world" font="roboto" width="30" transparent="false" billboard></a-text>
+            <div class="setting-panel">
+                <div class="setting-name">Lap finished when distance to marker less than:</div>
+                <input id="minMarkerDistanceMeters" type="text" value="1" size="4" oninput="applySettings()">
+                <div class="setting-units"> meters</div>
+            </div>
 
-        </a-marker>
+            <div class="setting-panel">
+                <div class="setting-name">Min lap time:</div>
+                <input id="minLapTimeSeconds" type="text" value="5" size="4" oninput="applySettings()">
+                <div class="setting-units"> seconds</div>
+            </div>
 
-        <a-entity camera></a-entity>
-    </a-scene>
+            <table style="margin: auto">
+                <tr>
+                    <td><div class="start-race-button" onclick="toggleRace()">Start race</div></td>
+                    <td><div class="help-button" onclick="document.querySelector('.help-panel').style.display='block'">Help</div></td>
+                </tr>
+            </table>
 
-    <audio id="lap-finished-audio" src="sounds/lap-finished-ring.mp3"></audio>
-
-    <div class="settings-panel">
-        <div class="settings-panel-header">Settings:</div>
-
-        <div class="setting-panel">
-            <div class="setting-name" style="width: 80px">Camera:</div>
-            <select id="cameraDevice" style="width: 250px" onchange="onCameraSelected()">
-            </select>
         </div>
 
-        <div class="setting-panel">
-            <div class="setting-name">Pilot name:</div>
-            <input id="pilotName" type="text" value="R5" size="4" oninput="applySettings()">
+        <div class="laps-panel">
+            <div class="laps-panel-header">Laps:</div>
+
+            <table class="lap-times">
+                <tr class="laps-table-header-row">
+                    <th class="laps-column-header">Pilot</th>
+                    <th class="laps-column-header">Lap</th>
+                    <th class="laps-column-header">Time</th>
+                    <th class="laps-column-header">Split</th>
+                </tr>
+            </table>
         </div>
 
-        <div class="setting-panel">
-            <div class="setting-name">Marker size:</div>
-            <input id="markerSizeMeters" type="text" value="0.2" size="4" oninput="applySettings()">
-            <div class="setting-units"> meters</div>
+        <audio id="lap-finished-audio" src="sounds/lap-finished-ring.mp3"></audio>
+
+        <div class="help-panel" onclick="document.querySelector('.help-panel').style.display='none'">
+
+            <div class="help-content">
+                <b>AR lap tracker</b>
+
+                <p>AR lap tracker is a web tool for tracking laps in FPV drone racing by marking finish line with AR markers/QR codes
+                    and recognizing them in VTX video feed. You'll need USB OTG 5.8Ghz video receiver to use it.</p>
+
+                <b>How to use</b>
+
+                <p>Print following marker on A4 paper and place it near the finish line.</p>
+                <img src="markers/marker-4x4_bch_13_9_3-value-22.png" width="100px" height="100px">
+
+                <p>Use <a href="markers/marker-4x4_bch_13_9_3-value-22.pdf">this pdf</a> to print - marker MUST have white
+                    margins around it, otherwise it would be difficult to recognize. Sometimes smaller marker is better
+                    and in our tests black area 13x13cm also worked well on A4 paper.</p>
+
+                <p>Connect USB OTG video receiver to your PC - it automatically acts as an ordinary webcam.</p>
+
+                <p>Input the size of marker - the length of black square's side in meters, on A4 from pdf it's
+                    usually about 17cm, so input 0.17.</p>
+
+                <p>When drone is near the marker and marker goes out of sight - the app assumes that pilot passed the finish
+                    gate. Configure this distance threshold. Note that some cameras have narrow FOV and can't see marker when they
+                    are too close to it.</p>
+
+                <p>Set min lap time to ignore cases when pilot got stuck near the finish gate for some time.</p>
+
+                <p>Press Start race button - the app asks you to record screen first. It is a nice feature in case you ran into
+                    problems during the race - you can always go through the record manually later. After you've selected the screen
+                    to capture - the race starts and you can take off.</p>
+
+                <p>When drone passes near the marker facing it - a lap should be recorded and shown in the app.</p>
+
+                <b>Calibration</b>
+
+                <p>Before starting the race you can power your drone and point it to the marker - the app should show a blue
+                    box where it detects the marker and distance to it.</p>
+
+                <p>If you don't see the box - make sure your marker is clearly visible through the camera and sheet of paper is
+                    not bent - it should be straight. Marker rotation over any axis doesn't matter.</p>
+
+                <p>If show distance to marker is incorrect - make sure you've set marker size in settings.</p>
+
+                <b>Known issues</b>
+
+                <p>If recording is many minutes long it may consume all memory at the moment. Will be fixed later.</p>
+
+                <p>Currently tested only in Chrome browser.</p>
+            </div>
+
         </div>
 
-        <div class="setting-panel">
-            <div class="setting-name">Lap finished when distance to marker less than:</div>
-            <input id="minMarkerDistanceMeters" type="text" value="1" size="4" oninput="applySettings()">
-            <div class="setting-units"> meters</div>
+
+        <div class="videos-panel">
+            <!-- VTX video is PAL which is 720x576 -->
+            <iframe src="video.html" width="720" height="576"></iframe>
+            <!--        <iframe src="index.html" width="720" height="576"></iframe>-->
         </div>
-
-        <div class="setting-panel">
-            <div class="setting-name">Min lap time:</div>
-            <input id="minLapTimeSeconds" type="text" value="5" size="4" oninput="applySettings()">
-            <div class="setting-units"> seconds</div>
-        </div>
-
-        <table style="margin: auto">
-            <tr>
-                <td><div class="start-race-button" onclick="toggleRace()">Start race</div></td>
-                <td><div class="help-button" onclick="document.querySelector('.help-panel').style.display='block'">Help</div></td>
-            </tr>
-        </table>
-
-    </div>
-
-
-    <div class="laps-panel">
-        <div class="laps-panel-header">Laps:</div>
-
-        <table class="lap-times">
-            <tr class="laps-table-header-row">
-                <th class="laps-column-header">Lap</th>
-                <th class="laps-column-header">Time</th>
-                <th class="laps-column-header">Split</th>
-            </tr>
-        </table>
-    </div>
-</div>
-
-<div class="help-panel" onclick="document.querySelector('.help-panel').style.display='none'">
-
-    <div class="help-content">
-        <b>AR lap tracker</b>
-
-        <p>AR lap tracker is a web tool for tracking laps in FPV drone racing by marking finish line with AR markers/QR codes
-            and recognizing them in VTX video feed. You'll need USB OTG 5.8Ghz video receiver to use it.</p>
-
-        <b>How to use</b>
-
-        <p>Print following marker on A4 paper and place it near the finish line.</p>
-        <img src="markers/marker-4x4_bch_13_9_3-value-22.png" width="100px" height="100px">
-
-        <p>Use <a href="markers/marker-4x4_bch_13_9_3-value-22.pdf">this pdf</a> to print - marker MUST have white
-            margins around it, otherwise it would be difficult to recognize. Sometimes smaller marker is better
-            and in our tests black area 13x13cm also worked well on A4 paper.</p>
-
-        <p>Connect USB OTG video receiver to your PC - it automatically acts as an ordinary webcam.</p>
-
-        <p>Input the size of marker - the length of black square's side in meters, on A4 from pdf it's
-        usually about 17cm, so input 0.17.</p>
-
-        <p>When drone is near the marker and marker goes out of sight - the app assumes that pilot passed the finish
-        gate. Configure this distance threshold. Note that some cameras have narrow FOV and can't see marker when they
-        are too close to it.</p>
-
-        <p>Set min lap time to ignore cases when pilot got stuck near the finish gate for some time.</p>
-
-        <p>Press Start race button - the app asks you to record screen first. It is a nice feature in case you ran into
-        problems during the race - you can always go through the record manually later. After you've selected the screen
-        to capture - the race starts and you can take off.</p>
-
-        <p>When drone passes near the marker facing it - a lap should be recorded and shown in the app.</p>
-
-        <b>Calibration</b>
-
-        <p>Before starting the race you can power your drone and point it to the marker - the app should show a blue
-        box where it detects the marker and distance to it.</p>
-
-        <p>If you don't see the box - make sure your marker is clearly visible through the camera and sheet of paper is
-        not bent - it should be straight. Marker rotation over any axis doesn't matter.</p>
-
-        <p>If show distance to marker is incorrect - make sure you've set marker size in settings.</p>
-
-        <b>Known issues</b>
-
-        <p>If recording is many minutes long it may consume all memory at the moment. Will be fixed later.</p>
-
-        <p>Currently tested only in Chrome browser.</p>
-    </div>
-
-</div>
-
-</body>
+    </body>
 </html>

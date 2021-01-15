@@ -17,4 +17,15 @@ See Help section in the app for details.
 This tool was inspired by [TinyViewPlus](https://github.com/t-asano/tinyviewplus) which works with 
 similar accuracy, but requires installation and is not crossplatform.
 
-AR Lap timer uses [AR.js](https://github.com/AR-js-org/AR.js) for marker recognition. 
+AR Lap timer uses [AR.js](https://github.com/AR-js-org/AR.js) for marker recognition.
+
+**Roadmap:**
+
+- Support several markers - ability to place them on both sides of gates to increase recognition probability 
+  in case camera is facing sideways
+- Add best practices for setup to Help section
+- Support using TinyViewPlus ArUco markers to be able to reuse tinyview gates
+- Add and tune finish sounds
+- Check marker rotation to be able to point it to gates center and avoid registering lap if drone passed 
+  outside the gates
+- Tune AR.js video buffer size to match camera frame size to increase performance  

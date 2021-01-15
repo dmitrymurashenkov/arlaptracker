@@ -1,0 +1,21 @@
+.video-panel {
+    background: rgba(255,255,255,0.9);
+    box-shadow: 10px 5px 15px rgba(0, 0, 0, .5);
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    padding: 10px;
+    width: 360px;
+}
+
+.video-option {
+    margin: 10px;
+}
+
+.video-option-name {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    display: inline-block;
+    width: 100px;
+}

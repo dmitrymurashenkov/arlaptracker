@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>Single AR.js frame</title>
+        <script src="https://aframe.io/releases/1.1.0/aframe.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+
+        <!-- Add billboard a-frame component to have text labels face camera at all times -->
+        <script src="https://rawgit.com/blairmacintyre/aframe-look-at-billboard-component/master/dist/aframe-look-at-billboard-component.min.js"></script>
+
+        <script src="video-camera.js"></script>
+        <script src="video-arjs.js"></script>
+        <script src="video-race.js"></script>
+        <link rel="stylesheet" href="video.css"/>
+    </head>
+    <body>
+        <div>
+            <!-- At the moment video viewport can't be resized in AR.js https://github.com/AR-js-org/AR.js/issues/15 -->
+            <a-scene arjs='detectionMode: mono_and_matrix; matrixCodeType: 4x4_BCH_13_9_3;' vr-mode-ui="enabled: false;">
+                <!--
+                For testing purposes we can record screen, put it to ./video.webm and load this page
+                with different marker settings to see if it enhances detection
+                -->
+            <!--<a-scene arjs='detectionMode: mono_and_matrix; matrixCodeType: 4x4_BCH_13_9_3; sourceType: video; sourceUrl: video.webm' vr-mode-ui="enabled: false;">-->
+
+                <!-- We took standard marker and generated pattern for it - seems pattern works a bit better than the marker itself! -->
+                <a-marker id="finish-marker" preset="pattern" type="pattern" url="markers/marker-4x4_bch_13_9_3-value-22.patt" showdistance finishmarker>
+
+                    <a-box color="blue" depth="1" height="1" width="1" opacity="0.5"></a-box>
+                    <a-text id="finish-marker-distance" value="Hello world" font="roboto" width="30" transparent="false" billboard></a-text>
+
+                </a-marker>
+
+                <a-entity camera></a-entity>
+            </a-scene>
+        </div>
+
+        <div class="video-panel">
+            <div class="video-option">
+                <div class="video-option-name">Camera:</div>
+                <select id="cameraDevice" style="width: 230px" onchange="onCameraSelected()">
+                </select>
+            </div>
+
+            <div class="video-option">
+                <div class="video-option-name">Pilot name:</div>
+                <input id="pilotName" type="text" value="Pilot1" size="26">
+            </div>
+        </div>
+    </body>
+</html>

@@ -43,7 +43,9 @@ function startRecord(filename, callback) {
 function stopRecord() {
     if (mediaRecorder) {
         mediaRecorder.stream.getTracks().forEach(track => track.stop());
-        mediaRecorder.stop();
+        if (mediaRecorder.state == 'active') {
+            mediaRecorder.stop();
+        }
         mediaRecorder = null;
     }
 }

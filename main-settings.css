@@ -1,5 +1,6 @@
 .settings-panel {
-    background: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.9);
+    box-shadow: 10px 5px 15px rgba(0, 0, 0, .5);
     position: absolute;
     top: 10px;
     left: 10px;
@@ -41,5 +42,12 @@
     width: 100px;
     padding: 10px;
     margin: auto;
-    background-color: lightgreen;
+    /*background-color: lightgreen;*/
+    background-image: linear-gradient(45deg, #b8ffc4 25%, #e5ff7f 25%, #e5ff7f 50%, #b8ffc4 50%, #b8ffc4 75%, #e5ff7f 75%, #e5ff7f 100%);
+    background-size: 56.57px 56.57px;
+}
+
+
+.stop-race-button {
+    background-image: linear-gradient(45deg, #ffe6b8 25%, #d6d6d6 25%, #d6d6d6 50%, #ffe6b8 50%, #ffe6b8 75%, #d6d6d6 75%, #d6d6d6 100%);
 }

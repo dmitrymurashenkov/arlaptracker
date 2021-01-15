@@ -1,0 +1,17 @@
+body {
+    background-image: linear-gradient(45deg, #B2A2CD 25%, #5F5370 25%, #5F5370 50%, #B2A2CD 50%, #B2A2CD 75%, #5F5370 75%, #5F5370 100%);
+    background-size: 56.57px 56.57px;
+}
+
+.videos-panel {
+    position: absolute;
+    left: 420px;
+    top: 10px;
+    width: 500px;
+}
+
+.videos-panel > iframe {
+    border: none;
+    box-shadow: 10px 5px 15px rgba(0, 0, 0, .5);
+}
+
