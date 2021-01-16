@@ -4,7 +4,7 @@ var race = {
 }
 
 //API definition for 'race.laps' property
-var lapModel = {
+let lapModel = {
     pilot: 'Pilot1',
     lapNumber: 3,
     time: 5.142,
@@ -14,12 +14,12 @@ var lapModel = {
 function toggleRace() {
     if (!race.startTime) {
         if (checkPilotNamesUnique()) {
-            startRecord("race-" + new Date().toISOString() + ".webm", function () {
+            startRecord(buildRecordFileName(), function () {
                 race.startTime = new Date();
                 race.laps = [];
                 initStartTime(race.startTime);
 
-                var lapTableRows = document.querySelectorAll('.laps-table-data-row');
+                let lapTableRows = document.querySelectorAll('.laps-table-data-row');
                 for (let i = 0; i < lapTableRows.length; i++) {
                     lapTableRows[i].remove();
                 }
@@ -39,9 +39,21 @@ function toggleRace() {
     }
 }
 
+function buildRecordFileName() {
+    let pilotNamesString = '';
+    //Record start date doesn't match actual race start date
+    let recordStartDate = new Date();
+    let iframes = document.querySelectorAll('.pilot-video > iframe');
+    for (let i = 0; i < iframes.length; i++) {
+        let pilotName = iframes[i].contentWindow.document.querySelector('#pilotName').value;
+        pilotNamesString += pilotName + '-';
+    }
+    return "race-" + pilotNamesString + recordStartDate.toLocaleDateString() + "-" + recordStartDate.toLocaleTimeString() + ".webm"
+}
+
 function checkPilotNamesUnique() {
     let pilotNames = [];
-    var iframes = document.querySelectorAll('.pilot-video > iframe');
+    let iframes = document.querySelectorAll('.pilot-video > iframe');
     for (let i = 0; i < iframes.length; i++) {
         let pilotName = iframes[i].contentWindow.document.querySelector('#pilotName').value;
         if (pilotNames.includes(pilotName)) {
@@ -68,7 +80,7 @@ function drawLaps() {
     for (let i = displayedLaps; i < race.laps.length; i++) {
         let lapToDraw = race.laps[i];
 
-        var lapsTable = document.querySelector('.lap-times > tbody');
+        let lapsTable = document.querySelector('.lap-times > tbody');
 
         lapsTable.innerHTML +=
             '<tr class="laps-table-data-row">\n' +

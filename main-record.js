@@ -5,39 +5,44 @@ var recordFilename;
 //Before record is started - user is asked to select browser tab to record,
 //and after that specified callback is invoked.
 function startRecord(filename, callback) {
-    recordFilename = filename;
+    if (window.settings.recordVideo) {
+        recordFilename = filename;
 
-    var displayMediaOptions = {
-        video: {
-            cursor: "never"
-        },
-        audio: false
-    };
+        var displayMediaOptions = {
+            video: {
+                cursor: "never"
+            },
+            audio: false
+        };
 
-    navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
-        .catch(err => {
-            console.error("Error:" + err);
-            return null;
-        })
-        .then(function (stream) {
-            videoRecordBlobs = [];
+        navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
+            .catch(err => {
+                console.error("Error:" + err);
+                return null;
+            })
+            .then(function (stream) {
+                videoRecordBlobs = [];
 
-            let recordStartTime = new Date();
+                let recordStartTime = new Date();
 
-            var options = buildRecordingOptions();
-            try {
-                mediaRecorder = new MediaRecorder(stream, options);
-            } catch (e) {
-                console.error('Exception while creating MediaRecorder:', e);
-                errorMsgElement.innerHTML = `Exception while creating MediaRecorder: ${JSON.stringify(e)}`;
-                return;
-            }
+                var options = buildRecordingOptions();
+                try {
+                    mediaRecorder = new MediaRecorder(stream, options);
+                } catch (e) {
+                    console.error('Exception while creating MediaRecorder:', e);
+                    errorMsgElement.innerHTML = `Exception while creating MediaRecorder: ${JSON.stringify(e)}`;
+                    return;
+                }
 
-            mediaRecorder.ondataavailable = saveRecordedBlob;
-            mediaRecorder.start();
+                mediaRecorder.ondataavailable = saveRecordedBlob;
+                mediaRecorder.start();
 
-            callback();
-        });
+                callback();
+            });
+    }
+    else {
+        callback();
+    }
 }
 
 function stopRecord() {
