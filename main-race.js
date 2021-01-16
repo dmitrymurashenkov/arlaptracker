@@ -13,19 +13,21 @@ var lapModel = {
 
 function toggleRace() {
     if (!race.startTime) {
-        startRecord("race-" + new Date().toISOString() + ".webm", function () {
-            race.startTime = new Date();
-            race.laps = [];
-            initStartTime(race.startTime);
+        if (checkPilotNamesUnique()) {
+            startRecord("race-" + new Date().toISOString() + ".webm", function () {
+                race.startTime = new Date();
+                race.laps = [];
+                initStartTime(race.startTime);
 
-            var lapTableRows = document.querySelectorAll('.laps-table-data-row');
-            for (let i = 0; i < lapTableRows.length; i++) {
-                lapTableRows[i].remove();
-            }
+                var lapTableRows = document.querySelectorAll('.laps-table-data-row');
+                for (let i = 0; i < lapTableRows.length; i++) {
+                    lapTableRows[i].remove();
+                }
 
-            document.querySelector('.start-race-button').innerHTML = "Stop race";
-            document.querySelector('.start-race-button').classList.add("stop-race-button");
-        });
+                document.querySelector('.start-race-button').innerHTML = "Stop race";
+                document.querySelector('.start-race-button').classList.add("stop-race-button");
+            });
+        }
     } else {
         stopRecord();
 
@@ -35,6 +37,22 @@ function toggleRace() {
         document.querySelector('.start-race-button').innerHTML = "Start race";
         document.querySelector('.start-race-button').classList.remove("stop-race-button");
     }
+}
+
+function checkPilotNamesUnique() {
+    let pilotNames = [];
+    var iframes = document.querySelectorAll('.pilot-video > iframe');
+    for (let i = 0; i < iframes.length; i++) {
+        let pilotName = iframes[i].contentWindow.document.querySelector('#pilotName').value;
+        if (pilotNames.includes(pilotName)) {
+            alert('Pilot names must be unique!');
+            return false;
+        }
+        else {
+            pilotNames.push(pilotName);
+        }
+    }
+    return true;
 }
 
 function initStartTime(raceStartTime) {
