@@ -26,6 +26,7 @@ function toggleRace() {
 
                 document.querySelector('.start-race-button').innerHTML = "Stop race";
                 document.querySelector('.start-race-button').classList.add("stop-race-button");
+                enableSettingsEdit(false);
             });
         }
     } else {
@@ -36,6 +37,22 @@ function toggleRace() {
 
         document.querySelector('.start-race-button').innerHTML = "Start race";
         document.querySelector('.start-race-button').classList.remove("stop-race-button");
+        enableSettingsEdit(true);
+    }
+}
+
+function enableSettingsEdit(enable) {
+    let inputs = document.querySelectorAll('.setting-panel > input');
+    for (let i = 0; i < inputs.length; i++) {
+        inputs[i].disabled = !enable;
+    }
+
+    let iframes = document.querySelectorAll('.pilot-video > iframe');
+    for (let i = 0; i < iframes.length; i++) {
+        let pilotOptions = iframes[i].contentWindow.document.querySelectorAll('.video-option > input, select');
+        for (let j = 0; j < pilotOptions.length; j++) {
+            pilotOptions[j].disabled = !enable;
+        }
     }
 }
 
