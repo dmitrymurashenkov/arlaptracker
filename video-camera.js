@@ -1,16 +1,26 @@
-window.addEventListener('load', (event) => {
+window.addEventListener('arjs-video-loaded', (event) => {
     loadCameraDevices(document.querySelector('#cameraDevice'));
 });
 
 function loadCameraDevices(dropdownElement) {
     navigator.mediaDevices.enumerateDevices()
         .then(function (devices) {
+
+            let firstCamera = true;
             for (let i = 0; i < devices.length; i++) {
                 let device = devices[i];
                 if (device.kind == 'videoinput') {
-                    dropdownElement.insertAdjacentHTML('beforeend', '<option value="' + device.deviceId + '">' + device.label + '</option>')
+                    let selected = '';
+                    if (firstCamera) {
+                        selected = 'selected';
+                        firstCamera = false;
+                    }
+                    dropdownElement.insertAdjacentHTML('beforeend', '<option ' + selected + ' value="' + device.deviceId + '">' + device.label + '</option>');
                 }
             }
+            dropdownElement.insertAdjacentHTML('beforeend', '<option value="">Remove pilot</option>');
+            dropdownElement.dispatchEvent(new Event('change'));
+
         })
         .catch(function (err) {
             console.log('Failed to list available camera devices', err);
@@ -20,7 +30,6 @@ function loadCameraDevices(dropdownElement) {
 
 function onCameraSelected() {
     let devicesDropdown = document.querySelector('#cameraDevice');
-    console.log('New camera selected', devicesDropdown.value);
 
     var arjsVideo = document.querySelector("#arjs-video");
 
@@ -29,18 +38,22 @@ function onCameraSelected() {
         track.stop();
     });
 
+    if (devicesDropdown.value) {
+        var constraints = {
+            audio: false,
+            video: {deviceId: {exact: devicesDropdown.value}},
+        };
 
-    var constraints = {
-        audio: false,
-        video: { deviceId: { exact: devicesDropdown.value } },
-    };
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function success(stream) {
+                arjsVideo.srcObject = stream;
 
-    navigator.mediaDevices.getUserMedia(constraints)
-        .then(function success(stream) {
-            arjsVideo.srcObject = stream;
-
-            //reinit arjs
-            var event = new CustomEvent("camera-init", { stream: stream });
-            window.dispatchEvent(event);
-        });
+                //reinit arjs
+                var event = new CustomEvent("camera-init", {stream: stream});
+                window.dispatchEvent(event);
+            });
+    }
+    else {
+        window.frameElement.remove();
+    }
 }

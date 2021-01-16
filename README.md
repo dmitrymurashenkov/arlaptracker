@@ -29,3 +29,7 @@ AR Lap timer uses [AR.js](https://github.com/AR-js-org/AR.js) for marker recogni
 - Check marker rotation to be able to point it to gates center and avoid registering lap if drone passed 
   outside the gates
 - Tune AR.js video buffer size to match camera frame size to increase performance  
+- Save video records as mp4 - it is more widely supported
+- Add button to remove pilot
+- Save settings in local storage to prevent their reset on page refresh
+- Remove mouse cursor from the recording
