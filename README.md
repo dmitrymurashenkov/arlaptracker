@@ -2,9 +2,9 @@
 
 Tracks lap times for FPV drone racing events by recognizing barcode markers in the VTX video feed.
 
-Checkout [demo video](demo.webm).
+In action it looks like this:
 
-![Demo video preview here](demo.gif)
+![Demo video here](demo.gif)
 
 Fully web-based. Latest release available at: https://dmitrymurashenkov.github.io/arlaptracker/
 
