@@ -129,15 +129,28 @@
                 <p><b>Pilot name</b> - pilot name to use when tracking laps to distinguish between several pilots.
                     Make sure all pilots have unique names!</p>
 
-                <h2>Calibration</h2>
+                <h2>Marker placement best practices</h2>
 
-                <p>Before starting the race you can power your drone and point it to the marker - the app should show a blue
-                    box where it detects the marker and distance to it.</p>
+                <p>Before starting the race you should power your drone and point it to the marker - the app should
+                    show a blue box where it detects the marker and distance to it. Check if shown distance to marker
+                    is correct - otherwise make sure you've set marker size in settings.</p>
 
-                <p>If you don't see the box - make sure your marker is clearly visible through the camera and sheet of paper is
-                    not bent - it should be straight. Marker rotation over any axis doesn't matter.</p>
+                <p>If you don't see the box - make sure your marker is clearly visible through the camera and sheet
+                    of paper is not bent - it should be straight. Marker rotation over any axis doesn't matter.</p>
 
-                <p>If show distance to marker is incorrect - make sure you've set marker size in settings.</p>
+                <p>If marker is partially visible - it won't be recognized. Bear in mind that marker can also be
+                    covered by OSD (especially low battery warning later in race!) or VTX noise.</p>
+
+                <p>To increase probability of marker recognition - you can place several markers around the finish
+                    gate (just print one same marker several times) - if at least one of them is recognized the
+                    lap will be recorded correctly. Although app thinks that only one marker is printed and will shift
+                    blue area between them depending on which one is better visible - it doesn't affect lap tracking
+                    since in this case marker is still considered constantly visible.</p>
+
+                <p>App needs about 0.5-1 sec for marker to be present on screen and be relatively stable in order to
+                find it intially and then track it. When planing track layout a typical option is to have finish gate
+                about 3-5m after 180 turn so that pilots slow down, face the gate with markers and then approach it in
+                    a straight line.</p>
 
                 <h2>Known issues</h2>
 
