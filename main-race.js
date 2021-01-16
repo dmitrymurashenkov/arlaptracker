@@ -75,6 +75,27 @@ function initStartTime(raceStartTime) {
     }
 }
 
+function drawRaceTime() {
+    if (race.startTime) {
+        let raceTime = (new Date().getTime() - race.startTime.getTime()) / 1000;
+        document.querySelector('.race-time').innerHTML = formatRaceTime(raceTime);
+    }
+}
+
+function formatRaceTime(raceTimeSeconds) {
+    var hours   = Math.floor(raceTimeSeconds / 3600);
+    var minutes = Math.floor((raceTimeSeconds - (hours * 3600)) / 60);
+    var seconds = raceTimeSeconds - (hours * 3600) - (minutes * 60);
+    seconds = seconds.toFixed(3);
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    return hours+':'+minutes+':'+seconds;
+}
+
+setInterval(drawRaceTime, 31);
+
 function drawLaps() {
     let displayedLaps = document.querySelectorAll('.laps-table-data-row').length;
     for (let i = displayedLaps; i < race.laps.length; i++) {

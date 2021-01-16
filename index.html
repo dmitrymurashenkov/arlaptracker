@@ -17,7 +17,12 @@
     <body style="background-color: rgba(240,240,255,0.6)">
 
         <div class="settings-panel">
-            <div class="settings-panel-header">Settings:</div>
+            <table>
+            <tr>
+                <td><div class="settings-panel-header">Settings:</div></td>
+                <td style="text-align: right; width: 200px; vertical-align: top"><div class="help-button" onclick="document.querySelector('.help-panel').style.display='block'">Help</div></td>
+            </tr>
+            </table>
 
             <div class="setting-panel">
                 <div class="setting-name">Marker size:</div>
@@ -41,18 +46,11 @@
                 <div class="setting-name">Record video:</div>
                 <input id="recordVideo" type="checkbox" style="margin: 0" oninput="applySettings()">
             </div>
-
-            <table style="margin: auto">
-                <tr>
-                    <td><div class="start-race-button" onclick="toggleRace()">Start race</div></td>
-                    <td><div class="help-button" onclick="document.querySelector('.help-panel').style.display='block'">Help</div></td>
-                </tr>
-            </table>
-
         </div>
 
         <div class="laps-panel">
-            <div class="laps-panel-header">Laps:</div>
+            <div class="start-race-button" onclick="toggleRace()">Start race</div>
+            <div class="race-time" >00:00:00.000</div>
 
             <table class="lap-times">
                 <tr class="laps-table-header-row">
