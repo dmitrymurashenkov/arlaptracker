@@ -161,6 +161,11 @@ function drawLaps() {
         '</tr>';
 
         document.querySelector('#lap-finished-audio').play();
+
+        //Autoscroll laps table to bottom by default - hover mouse over table to prevent it
+        if (!document.querySelector('.lap-times-scrollbox:hover')) {
+            document.querySelector('.lap-times-scrollbox').scrollTop = document.querySelector('.lap-times-scrollbox').scrollHeight;
+        }
     }
 }
 

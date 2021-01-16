@@ -7,3 +7,12 @@ function addPilot() {
         '</div>');
 
 }
+
+//We want to avoid vertical scrollbars for the whole <body> in order to record all race
+//info via screen capture. I've failed to do it via CSS, so let's use JS resizing!
+window.addEventListener('load', maximizeLapsPanel)
+window.addEventListener('resize', maximizeLapsPanel);
+
+function maximizeLapsPanel() {
+    document.querySelector('.laps-panel').style.height = (window.innerHeight - 390) + 'px';
+}

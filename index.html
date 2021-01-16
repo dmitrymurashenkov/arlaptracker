@@ -62,14 +62,28 @@
             <div class="start-race-button" onclick="toggleRace()">Start race</div>
             <div class="race-time">00:00:00.000</div>
 
-            <table class="lap-times">
-                <tr class="laps-table-header-row">
+            <!--
+            In order to freeze header we split laps table into 2 tables.
+
+            It's better to have laps table with scroll to avoid scrolling the whole page to always
+            keep race time and video on the screen during the recording
+             -->
+            <table style="width: 355px">
+                <thead>
                     <th class="laps-column-header">Pilot</th>
                     <th class="laps-column-header">Lap</th>
                     <th class="laps-column-header">Time</th>
                     <th class="laps-column-header">Split</th>
-                </tr>
+                </thead>
             </table>
+
+            <div class="lap-times-scrollbox">
+                <table class="lap-times">
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
 
@@ -152,11 +166,18 @@
                 about 3-5m after 180 turn so that pilots slow down, face the gate with markers and then approach it in
                     a straight line.</p>
 
-                <h2>Known issues</h2>
+                <h2>Known issues, limitations and compatibility</h2>
 
-                <p>If recording is many minutes long it may consume all memory at the moment. Will be fixed later.</p>
+                <p>If recording is many minutes long it may consume all memory - not tested currently, but probably
+                    will be fixed later.</p>
 
-                <p>Currently tested only in Chrome browser.</p>
+                <p>Tested with:</p>
+
+                <ul>
+                    <li>Chrome browser</li>
+                    <li>Skydroid OTG USB 5.8Ghz video receiver</li>
+                    <li>Happymodel Mobula6 tinywhoop</li>
+                </ul>
             </div>
 
         </div>
