@@ -8,9 +8,11 @@ function startRecord(filename, callback) {
     if (window.settings.recordVideo) {
         recordFilename = filename;
 
-        var displayMediaOptions = {
+        let displayMediaOptions = {
             video: {
-                cursor: "never"
+                //Chrome currently doesn't support these options
+                cursor: 'never',
+                displaySurface: 'browser'
             },
             audio: false
         };
@@ -25,7 +27,7 @@ function startRecord(filename, callback) {
 
                 let recordStartTime = new Date();
 
-                var options = buildRecordingOptions();
+                let options = buildRecordingOptions();
                 try {
                     mediaRecorder = new MediaRecorder(stream, options);
                 } catch (e) {
@@ -82,11 +84,11 @@ function saveRecordedBlob(event) {
 }
 
 function saveRecordToFile() {
-    var blob = new Blob(videoRecordBlobs, {
+    let blob = new Blob(videoRecordBlobs, {
         type: "video/webm"
     });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement("a");
+    let url = URL.createObjectURL(blob);
+    let a = document.createElement("a");
     document.body.appendChild(a);
     a.style = "display: none";
     a.href = url;

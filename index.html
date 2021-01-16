@@ -44,6 +44,15 @@
             </div>
 
             <div class="setting-panel">
+                <div class="setting-name" style="width: 85px">Countdown:</div>
+                <div class="setting-name" style="width: 30px; margin-left: 17px"> min</div>
+                <input id="coundownMinSeconds" type="text" value="3" size="1" oninput="applySettings()">
+                <div class="setting-name" style="width: 30px; margin-left: 9px; margin-right: 8px"> max</div>
+                <input id="coundownMaxSeconds" type="text" value="3" size="1" oninput="applySettings()">
+                <div class="setting-units"> seconds</div>
+            </div>
+
+            <div class="setting-panel">
                 <div class="setting-name">Record video:</div>
                 <input id="recordVideo" type="checkbox" style="margin: 0" oninput="applySettings()">
             </div>
@@ -64,7 +73,9 @@
         </div>
     </div>
 
-        <audio id="lap-finished-audio" src="sounds/lap-finished-ring.mp3"></audio>
+        <audio id="lap-finished-audio" src="sounds/lap-finished.mp3"></audio>
+        <audio id="countdown-audio" src="sounds/countdown.mp3"></audio>
+        <audio id="start-audio" src="sounds/start.mp3"></audio>
 
         <div class="help-panel" onclick="document.querySelector('.help-panel').style.display='none'">
 
@@ -108,6 +119,9 @@
                 <p>Also this option guards your from accidentally erasing results after race was stopped if you've
                     unintentionally clicked Start race again since you'll need to select screen to record first and
                     only then previous results would be erased.</p>
+
+                <p><b>Countdown</b> - random or fixed countdown can be configured, you'll hear beeps every second
+                    and then the start sound.</p>
 
                 <p><b>Camera</b> - connect USB video receiver and select it in this dropdown. In order to remove the
                     device - select Remove pilot option.</p>

@@ -1,5 +1,8 @@
 var race = {
+    started: false,
     startTime: null,
+    countdownTimer: null,
+    raceStartTimer: null,
     laps: []
 }
 
@@ -12,33 +15,57 @@ let lapModel = {
 }
 
 function toggleRace() {
-    if (!race.startTime) {
+    if (!race.started) {
         if (checkPilotNamesUnique()) {
-            startRecord(buildRecordFileName(), function () {
-                race.startTime = new Date();
-                race.laps = [];
-                initStartTime(race.startTime);
-
-                let lapTableRows = document.querySelectorAll('.laps-table-data-row');
-                for (let i = 0; i < lapTableRows.length; i++) {
-                    lapTableRows[i].remove();
-                }
-
-                document.querySelector('.start-race-button').innerHTML = "Stop race";
-                document.querySelector('.start-race-button').classList.add("stop-race-button");
-                enableSettingsEdit(false);
-            });
+            startRecord(buildRecordFileName(), startRaceWithCountdown);
         }
     } else {
         stopRecord();
 
+        race.started = false;
         race.startTime = null;
         race.laps = [];
+        if (race.countdownTimer) {
+            clearInterval(race.countdownTimer);
+            race.countdownTimer = null;
+        }
+        if (race.raceStartTimer) {
+            clearTimeout(race.raceStartTimer);
+            race.raceStartTimer = null;
+        }
 
         document.querySelector('.start-race-button').innerHTML = "Start race";
         document.querySelector('.start-race-button').classList.remove("stop-race-button");
         enableSettingsEdit(true);
     }
+}
+
+function startRaceWithCountdown() {
+    race.started = true;
+    let lapTableRows = document.querySelectorAll('.laps-table-data-row');
+    for (let i = 0; i < lapTableRows.length; i++) {
+        lapTableRows[i].remove();
+    }
+
+    document.querySelector('.start-race-button').innerHTML = "Stop race";
+    document.querySelector('.start-race-button').classList.add("stop-race-button");
+    enableSettingsEdit(false);
+
+    let countdownSeconds = Math.random() * (settings.coundownMaxSeconds - settings.coundownMinSeconds) + settings.coundownMinSeconds;
+    race.raceStartTimer = setTimeout(function () {
+        clearInterval(race.countdownTimer);
+        document.querySelector('#start-audio').play();
+
+        race.startTime = new Date();
+        race.laps = [];
+        initStartTime(race.startTime);
+    }, countdownSeconds*1000);
+
+    race.countdownTimer = setInterval(function () {
+        document.querySelector('#countdown-audio').play();
+    }, 1000);
+
+    document.querySelector('#countdown-audio').play();
 }
 
 function enableSettingsEdit(enable) {
@@ -93,9 +120,14 @@ function initStartTime(raceStartTime) {
 }
 
 function drawRaceTime() {
-    if (race.startTime) {
-        let raceTime = (new Date().getTime() - race.startTime.getTime()) / 1000;
-        document.querySelector('.race-time').innerHTML = formatRaceTime(raceTime);
+    if (race.started) {
+        if (race.startTime) {
+            let raceTime = (new Date().getTime() - race.startTime.getTime()) / 1000;
+            document.querySelector('.race-time').innerHTML = formatRaceTime(raceTime);
+        }
+        else {
+            document.querySelector('.race-time').innerHTML = '00:00:00.000';
+        }
     }
 }
 
