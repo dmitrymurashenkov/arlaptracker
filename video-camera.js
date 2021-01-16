@@ -54,6 +54,6 @@ function onCameraSelected() {
             });
     }
     else {
-        window.frameElement.remove();
+        window.frameElement.parentElement.remove();
     }
 }
