@@ -69,12 +69,12 @@
         <div class="help-panel" onclick="document.querySelector('.help-panel').style.display='none'">
 
             <div class="help-content">
-                <b>AR lap tracker</b>
+                <h1>AR lap tracker</h1>
 
                 <p>AR lap tracker is a web tool for tracking laps in FPV drone racing by marking finish line with AR markers/QR codes
                     and recognizing them in VTX video feed. You'll need USB OTG 5.8Ghz video receiver to use it.</p>
 
-                <b>How to use</b>
+                <h2>How to use</h2>
 
                 <p>Print following marker on A4 paper and place it near the finish line.</p>
                 <img src="markers/marker-4x4_bch_13_9_3-value-22.png" width="100px" height="100px">
@@ -85,22 +85,33 @@
 
                 <p>Connect USB OTG video receiver to your PC - it automatically acts as an ordinary webcam.</p>
 
-                <p>Input the size of marker - the length of black square's side in meters, on A4 from pdf it's
-                    usually about 17cm, so input 0.17.</p>
+                <p>Configure the settings and hit Start race!</p>
 
-                <p>When drone is near the marker and marker goes out of sight - the app assumes that pilot passed the finish
-                    gate. Configure this distance threshold. Note that some cameras have narrow FOV and can't see marker when they
-                    are too close to it.</p>
+                <h2>Settings</h2>
 
-                <p>Set min lap time to ignore cases when pilot got stuck near the finish gate for some time.</p>
+                <p><b>Marker size</b> - the length of black square's side in meters, on A4 from pdf it's
+                    usually about 17cm, so input 0.17. This is used to determine distance to the marker
+                    and ignore it if it's too far away</p>
 
-                <p>Press Start race button - the app asks you to record screen first. It is a nice feature in case you ran into
-                    problems during the race - you can always go through the record manually later. After you've selected the screen
-                    to capture - the race starts and you can take off.</p>
+                <p><b>Lap finished when distance to marker less than</b> - when drone is near the marker and
+                    marker goes out of sight - the app assumes that pilot passed the finish gate. Configure this
+                    distance threshold. Note that some cameras have narrow FOV and can't see marker when they
+                    are too close to it so be sure to test it on different drones before the race.</p>
 
-                <p>When drone passes near the marker facing it - a lap should be recorded and shown in the app.</p>
+                <p><b>Min lap time</b> - set min lap time to ignore cases when pilot got stuck near the finish
+                    gate for some time. Adjust it it the actual length of your track.</p>
 
-                <b>Calibration</b>
+                <p><b>Record video</b> - in case of any lap counter errors we want to record video to be able to
+                    correct manually after the race. If this option is checked - you'll be asked to choose the
+                    browser tab to record and only then the race will start.</p>
+
+                <p><b>Camera</b> - connect USB video receiver and select it in this dropdown. In order to remove the
+                    device - select Remove pilot option.</p>
+
+                <p><b>Pilot name</b> - pilot name to use when tracking laps to distinguish between several pilots.
+                    Make sure all pilots have unique names!</p>
+
+                <h2>Calibration</h2>
 
                 <p>Before starting the race you can power your drone and point it to the marker - the app should show a blue
                     box where it detects the marker and distance to it.</p>
@@ -110,7 +121,7 @@
 
                 <p>If show distance to marker is incorrect - make sure you've set marker size in settings.</p>
 
-                <b>Known issues</b>
+                <h2>Known issues</h2>
 
                 <p>If recording is many minutes long it may consume all memory at the moment. Will be fixed later.</p>
 
