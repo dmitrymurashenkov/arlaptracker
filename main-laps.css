@@ -1,10 +1,7 @@
 .laps-panel {
     background: rgba(255,255,255,0.9);
     box-shadow: 10px 5px 15px rgba(0, 0, 0, .5);
-    position: absolute;
-    top: 360px;
-    left: 10px;
-    z-index: 10;
+    margin: 20px 0;
     padding: 10px;
     width: 360px;
 }

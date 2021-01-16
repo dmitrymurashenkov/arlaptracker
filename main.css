@@ -3,12 +3,15 @@ body {
     background-size: 56.57px 56.57px;
 }
 
+.left-column {
+    float: left;
+    height: 100%;
+}
+
 .videos-panel {
-    position: absolute;
-    left: 420px;
-    /*width: 1500px;*/
     max-width: 1500px;
-    top: 0;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .videos-panel > div > iframe {
@@ -17,16 +20,14 @@ body {
 }
 
 .pilot-video {
-    margin: 10px;
-    float: left;
+    margin: 0 0 20px 20px;
 }
 
 .add-pilot-button {
     width: 720px;
     height: 576px;
-    margin: 10px;
+    margin: 0 0 20px 20px;
     background: rgba(255,255,255,0.2);
-    float: left;
     box-shadow: 10px 5px 15px rgba(0, 0, 0, .5);
 }
 
