@@ -51,7 +51,7 @@
 
         <div class="laps-panel">
             <div class="start-race-button" onclick="toggleRace()">Start race</div>
-            <div class="race-time" >00:00:00.000</div>
+            <div class="race-time">00:00:00.000</div>
 
             <table class="lap-times">
                 <tr class="laps-table-header-row">
@@ -104,6 +104,10 @@
                 <p><b>Record video</b> - in case of any lap counter errors we want to record video to be able to
                     correct manually after the race. If this option is checked - you'll be asked to choose the
                     browser tab to record and only then the race will start.</p>
+
+                <p>Also this option guards your from accidentally erasing results after race was stopped if you've
+                    unintentionally clicked Start race again since you'll need to select screen to record first and
+                    only then previous results would be erased.</p>
 
                 <p><b>Camera</b> - connect USB video receiver and select it in this dropdown. In order to remove the
                     device - select Remove pilot option.</p>
