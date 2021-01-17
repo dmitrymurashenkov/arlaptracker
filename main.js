@@ -40,3 +40,4 @@ function maximizeVideos() {
         plusButtonDivs[i].style.fontSize = videoHeight*0.9 + 'px';
     }
 }
+

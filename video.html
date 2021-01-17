@@ -15,7 +15,25 @@
     <body>
         <div>
             <!-- At the moment video viewport can't be resized in AR.js https://github.com/AR-js-org/AR.js/issues/15 -->
-            <a-scene arjs='detectionMode: mono_and_matrix; matrixCodeType: 4x4_BCH_13_9_3;' vr-mode-ui="enabled: false;">
+            <!--
+                AR.js has many undocumented settings, for example ARjs.Profile.prototype.performance defines canvas
+                size with default 'desktop-normal' being 640x480 and maxDetectionRate 60. Alternative fast profile is
+                called 'phone-slow' and has lower canvas resolution which results in 30-50% lower detection distance,
+                but 30-50% more fps.
+
+                AR.js acts as listener for A-Frame framework and performs work every time A-Frame tries to draw the
+                frame. It can be seen in Chrome dev tools Performance tab stack. Seems AR.js performs detection only
+                on some frames based on maxDetectionRate. After our tests we found out that lower maxDetectionRate
+                dramatically improves fps and seems to result in less missed markers.
+
+                Since usb video receivers output 640x480 and original PAL resolution is 720x576 we stick to
+                desktop-normal profile with maxDetectionRate of 10. This gives good performance with 4 videos on screen.
+
+                To check performance - add 'stats' attribute on <a-scene> - it will draw debug info.
+
+                TODO test NFT marker detection
+             -->
+            <a-scene arjs='detectionMode: mono_and_matrix; matrixCodeType: 4x4_BCH_13_9_3; performanceProfile: desktop-normal; maxDetectionRate: 10;' vr-mode-ui="enabled: false;">
                 <!--
                 For testing purposes we can record screen, put it to ./video.webm and load this page
                 with different marker settings to see if it enhances detection
@@ -26,7 +44,7 @@
                 <a-marker id="finish-marker" preset="pattern" type="pattern" url="markers/marker-4x4_bch_13_9_3-value-22.patt" showdistance finishmarker>
 
                     <a-box color="blue" depth="1" height="1" width="1" opacity="0.5"></a-box>
-                    <a-text id="finish-marker-distance" value="Hello world" font="roboto" width="30" transparent="false" billboard></a-text>
+                    <a-text id="finish-marker-distance" value="Hello world" font="roboto" width="40" transparent="false" billboard></a-text>
 
                 </a-marker>
 

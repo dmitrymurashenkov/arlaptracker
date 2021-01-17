@@ -41,7 +41,11 @@ function onCameraSelected() {
     if (devicesDropdown.value) {
         var constraints = {
             audio: false,
-            video: {deviceId: {exact: devicesDropdown.value}},
+            video: {
+                deviceId: {
+                    exact: devicesDropdown.value
+                },
+            },
         };
 
         navigator.mediaDevices.getUserMedia(constraints)
