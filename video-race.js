@@ -4,7 +4,7 @@ var currentLapNumber;
 function checkLapFinished(marker) {
     if (window.parent.race.startTime) {
 
-        let distanceToMarker = toMeters(marker.object3D.position.length());
+        let distanceToMarker = heuristicScale(toMeters(marker.object3D.position.length()));
 
         if (distanceToMarker < window.parent.settings.minMarkerDistanceMeters) {
             //We were close to marker - seems we've just finished our lap
