@@ -25,7 +25,9 @@ AFRAME.registerComponent('showdistance', {
     },
     tick: function (time, timeDelta) {
         var distance = (this.el.object3D.position.length() * window.parent.settings.markerSizeMeters).toFixed(2);
-        this.textEl.setAttribute('value', distance + 'm');
+        if (this.el.object3D.visible) {
+            this.textEl.setAttribute('value', distance + 'm');
+        }
     }
 });
 

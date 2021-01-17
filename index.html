@@ -123,6 +123,9 @@
                     distance threshold. Note that some cameras have narrow FOV and can't see marker when they
                     are too close to it so be sure to test it on different drones before the race.</p>
 
+                <p>NOTE! At the moment there is a bug, where distance to marker is determined incorrectly and depends on
+                camera FOV. Please adjust this settings for your environment - better just to put higher value in it.</p>
+
                 <p><b>Min lap time</b> - set min lap time to ignore cases when pilot got stuck near the finish
                     gate for some time. Adjust it it the actual length of your track.</p>
 
@@ -161,10 +164,10 @@
                     blue area between them depending on which one is better visible - it doesn't affect lap tracking
                     since in this case marker is still considered constantly visible.</p>
 
-                <p>App needs about 0.5-1 sec for marker to be present on screen and be relatively stable in order to
-                find it intially and then track it. When planing track layout a typical option is to have finish gate
-                about 3-5m after 180 turn so that pilots slow down, face the gate with markers and then approach it in
-                    a straight line.</p>
+                <p>Marker needs to stay visible on screen and not be too shaky for about 0.5 sec in order to be
+                    recognized. When planing track layout a typical option is to have finish gate about 3-5m after 180
+                    degree turn so that pilots slow down, face the gate with markers and then approach it in a straight
+                    line.</p>
 
                 <h2>Known issues, limitations and compatibility</h2>
 
