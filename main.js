@@ -1,11 +1,13 @@
 function addPilot() {
-    var pilotVideos = document.querySelectorAll('.pilot-video');
-    var lastVideo = pilotVideos[pilotVideos.length - 1];
-    lastVideo.insertAdjacentHTML('afterend',
-        '<div class="pilot-video">\n' +
-        '    <iframe src="video.html" width="720" height="576"></iframe>\n' +
-        '</div>');
-    maximizeVideos();
+    if (!race.started) {
+        var pilotVideos = document.querySelectorAll('.pilot-video');
+        var lastVideo = pilotVideos[pilotVideos.length - 1];
+        lastVideo.insertAdjacentHTML('afterend',
+            '<div class="pilot-video">\n' +
+            '    <iframe src="video.html" width="720" height="576"></iframe>\n' +
+            '</div>');
+        maximizeVideos();
+    }
 }
 
 //We want to avoid vertical scrollbars for the whole <body> in order to record all race
