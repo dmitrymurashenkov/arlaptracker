@@ -13,7 +13,8 @@ function toMeters(value) {
 //matter what. But position and distance from camera can be different by 2 times depending on camera device
 //used. So the question is - if the positions differ that much then why is box rendered equal to marker?
 //
-//To counter that we introduce our additional scaling. This coefficient taken from Mobula6 camera Runcam nano 3.
+//To counter that we introduce our additional scaling. This coefficient taken from Mobula6 camera Runcam nano 3,
+//but Tarsier and Ant work correctly with this value and have measured distance difference within 10%.
 //
 //NOTE! that this must only be used when dealing with position and not box sizes! No idea why!
 //
