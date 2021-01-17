@@ -27,3 +27,8 @@ AR Lap timer uses [AR.js](https://github.com/AR-js-org/AR.js) for marker recogni
   outside the gates (possible bad idea - may lower recognition accuracy)
 - Save settings to query string to preserve them on page refresh if something got stuck
 - Remove mouse cursor from the recording (not possible in Chrome currently)
+
+**Contact:**
+
+If you have questions, want to discuss or share experience - create an issue in this project 
+or mail me: dmitry.murashenkov@gmail.com
