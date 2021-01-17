@@ -51,7 +51,7 @@ function startRaceWithCountdown() {
     document.querySelector('.start-race-button').classList.add("stop-race-button");
     enableSettingsEdit(false);
 
-    let countdownSeconds = Math.random() * (settings.coundownMaxSeconds - settings.coundownMinSeconds) + settings.coundownMinSeconds;
+    let countdownSeconds = Math.random() * (settings.coundownMaxSeconds - settings.coundownMinSeconds) + parseInt(settings.coundownMinSeconds);
     race.raceStartTimer = setTimeout(function () {
         clearInterval(race.countdownTimer);
         document.querySelector('#start-audio').play();
