@@ -21,7 +21,8 @@
             <table>
             <tr>
                 <td><div class="settings-panel-header">Settings:</div></td>
-                <td style="text-align: right; width: 200px; vertical-align: top"><div class="help-button" onclick="document.querySelector('.help-panel').style.display='block'">Help</div></td>
+                <td style="text-align: right; width: 200px; vertical-align: top"><div class="reset-button" onclick="window.location.href = window.location.href.split('?')[0];">Reset</div></td>
+                <td style="text-align: right; vertical-align: top"><div class="help-button" onclick="document.querySelector('.help-panel').style.display='block'">Help</div></td>
             </tr>
             </table>
 
@@ -151,6 +152,10 @@
                 <p><b>Pilot name</b> - pilot name to use when tracking laps to distinguish between several pilots.
                     Make sure all pilots have unique names!</p>
 
+                <p>Settings are saved to window url and are preserved upon refresh. This may be useful in receiver
+                got stuck or you have performance degradation and need to reload the page. To reset the settings to
+                defaults - click on Reset link in the Settings panel.</p>
+
                 <h2>Marker placement best practices</h2>
 
                 <p>Before starting the race you should power your drone and point it to the marker - the app should
@@ -198,10 +203,6 @@
 
 
         <div class="videos-panel">
-            <div class="pilot-video">
-                <!-- VTX video is PAL which is 720x576 -->
-                <iframe src="video.html" width="720" height="576"></iframe>
-            </div>
             <div class="add-pilot-button" onclick="addPilot()"><div class="plus">+</div></div>
         </div>
     </body>

@@ -1,10 +1,22 @@
-function addPilot() {
+let counter = 1;
+
+function removePilot(iframeId) {
+    document.querySelector('#' + iframeId).remove();
+    settingsToUrl();
+}
+
+function addPilot(pilotName, cameraDevice) {
     if (!race.started) {
-        var pilotVideos = document.querySelectorAll('.pilot-video');
-        var lastVideo = pilotVideos[pilotVideos.length - 1];
-        lastVideo.insertAdjacentHTML('afterend',
+        pilotName = pilotName || "Pilot1";
+        let url = "video.html?pilotName=" + pilotName;
+        if (cameraDevice) {
+            url += "&cameraDevice=" + cameraDevice;
+        }
+
+        let addPilotButton = document.querySelector('.add-pilot-button');
+        addPilotButton.insertAdjacentHTML('beforebegin',
             '<div class="pilot-video">\n' +
-            '    <iframe src="video.html" width="720" height="576"></iframe>\n' +
+            '    <iframe id="video' + (counter++) + '" src="' + url + '" width="720" height="576"></iframe>\n' +
             '</div>');
         maximizeVideos();
     }

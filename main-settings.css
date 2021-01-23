@@ -1,3 +1,11 @@
+.reset-button {
+    margin-left: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    text-decoration: underline;
+    color: blue;
+}
+
 .settings-panel {
     background: rgba(255,255,255,0.9);
     box-shadow: 10px 5px 15px rgba(0, 0, 0, .5);

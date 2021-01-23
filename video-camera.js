@@ -1,3 +1,5 @@
+var camerasLoaded = false;
+
 window.addEventListener('arjs-video-loaded', (event) => {
     loadCameraDevices(document.querySelector('#cameraDevice'));
 });
@@ -19,8 +21,10 @@ function loadCameraDevices(dropdownElement) {
                 }
             }
             dropdownElement.insertAdjacentHTML('beforeend', '<option value="">Remove pilot</option>');
-            dropdownElement.dispatchEvent(new Event('change'));
-
+            camerasLoaded = true;
+            urlToVideoSettings();
+            //Seems if we call urlToVideoSettings() then no need to dispatch event
+            //dropdownElement.dispatchEvent(new Event('change'));
         })
         .catch(function (err) {
             console.log('Failed to list available camera devices', err);
@@ -58,6 +62,25 @@ function onCameraSelected() {
             });
     }
     else {
-        window.frameElement.parentElement.remove();
+        window.parent.removePilot(window.frameElement.id);
     }
+    window.parent.settingsToUrl();
+}
+
+function urlToVideoSettings() {
+    var searchParams = new URLSearchParams(window.location.search);
+
+    let pilotName = searchParams.get("pilotName");
+    let cameraDevice = searchParams.get("cameraDevice");
+
+    if (pilotName && pilotName !== "") {
+        document.querySelector('#pilotName').value = pilotName;
+    }
+    if (cameraDevice && cameraDevice !== "") {
+        let cameraOption = document.querySelector('#cameraDevice option[value="' + cameraDevice + '"]');
+        if (cameraOption) {
+            cameraOption.selected = true;
+        }
+    }
+    onCameraSelected();
 }
