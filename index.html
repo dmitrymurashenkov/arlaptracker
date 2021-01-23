@@ -60,7 +60,7 @@
 
         <div class="laps-panel">
             <div class="start-race-button" onclick="toggleRace()">Start race</div>
-            <div class="race-time">00:00:00.000</div>
+            <div class="race-time">00:00.000</div>
 
             <!--
             In order to freeze header we split laps table into 2 tables.
@@ -68,12 +68,12 @@
             It's better to have laps table with scroll to avoid scrolling the whole page to always
             keep race time and video on the screen during the recording
              -->
-            <table style="width: 355px">
+            <table class="laps-table">
                 <thead>
-                    <th class="laps-column-header">Pilot</th>
-                    <th class="laps-column-header">Lap</th>
-                    <th class="laps-column-header">Time</th>
-                    <th class="laps-column-header">Split</th>
+                    <th class="laps-column-pilot">Pilot</th>
+                    <th class="laps-column-number">Lap</th>
+                    <th class="laps-column-time">Time</th>
+                    <th class="laps-column-split">Split</th>
                 </thead>
             </table>
 

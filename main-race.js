@@ -126,21 +126,19 @@ function drawRaceTime() {
             document.querySelector('.race-time').innerHTML = formatRaceTime(raceTime);
         }
         else {
-            document.querySelector('.race-time').innerHTML = '00:00:00.000';
+            document.querySelector('.race-time').innerHTML = '00:00.000';
         }
     }
 }
 
 function formatRaceTime(raceTimeSeconds) {
-    var hours   = Math.floor(raceTimeSeconds / 3600);
-    var minutes = Math.floor((raceTimeSeconds - (hours * 3600)) / 60);
-    var seconds = raceTimeSeconds - (hours * 3600) - (minutes * 60);
+    var minutes = Math.floor((raceTimeSeconds) / 60);
+    var seconds = raceTimeSeconds - (minutes * 60);
     seconds = seconds.toFixed(3);
 
-    if (hours   < 10) {hours   = "0"+hours;}
     if (minutes < 10) {minutes = "0"+minutes;}
     if (seconds < 10) {seconds = "0"+seconds;}
-    return hours+':'+minutes+':'+seconds;
+    return minutes+':'+seconds;
 }
 
 setInterval(drawRaceTime, 31);
@@ -154,10 +152,10 @@ function drawLaps() {
 
         lapsTable.innerHTML +=
             '<tr class="laps-table-data-row">\n' +
-            '   <td class="lap-pilot">' + lapToDraw.pilot + '</td>\n' +
-            '   <td class="lap-number">' + lapToDraw.lapNumber + '</td>\n' +
-            '   <td class="lap-time">' + lapToDraw.time + '</td>\n' +
-            '   <td class="lap-split">' + lapToDraw.split + '</td>\n' +
+            '   <td class="lap-pilot laps-column-pilot">' + lapToDraw.pilot + '</td>\n' +
+            '   <td class="lap-number laps-column-number">' + lapToDraw.lapNumber + '</td>\n' +
+            '   <td class="lap-time laps-column-time">' + lapToDraw.time + '</td>\n' +
+            '   <td class="lap-split laps-column-split">' + formatRaceTime(lapToDraw.split) + '</td>\n' +
         '</tr>';
 
         document.querySelector('#lap-finished-audio').play();

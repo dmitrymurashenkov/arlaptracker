@@ -8,21 +8,46 @@
     width: 360px;
 }
 
-.laps-column-header {
+.laps-table td {
+    padding: 0;
+}
+
+.laps-table th {
+    padding-left: 3px;
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 20px;
     margin-bottom: 30px;
     text-align: center;
-    width: 100px;
     border-bottom: dashed 1px black;
+}
+
+.laps-table {
+    width: 355px;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.laps-column-pilot {
+    min-width: 118px;
+}
+
+.laps-column-number {
+    min-width: 48px;
+}
+
+.laps-column-time {
+    min-width: 88px;
+}
+
+.laps-column-split {
+    min-width: 88px;
 }
 
 .lap-pilot {
     font-family: 'Roboto', sans-serif;
     font-weight: 600;
     font-size: 18px;
-    width: 100px;
     text-align: center;
     overflow: hidden;
 }
@@ -31,7 +56,6 @@
     font-family: 'Roboto', sans-serif;
     font-weight: 600;
     font-size: 18px;
-    width: 100px;
     text-align: center;
 }
 
@@ -39,7 +63,6 @@
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 18px;
-    width: 100px;
     text-align: center;
 }
 
@@ -48,7 +71,6 @@
     font-weight: 300;
     opacity: 0.8;
     font-size: 18px;
-    width: 100px;
     text-align: center;
 }
 
