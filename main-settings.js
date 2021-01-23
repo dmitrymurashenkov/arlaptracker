@@ -1,5 +1,5 @@
 var settings = {
-    markerSizeMeters: 0.17,
+    markerSizeMeters: 0.16,
     minMarkerDistanceMeters: 1.5,
     minLapTimeSeconds: 5,
     recordVideo: true,

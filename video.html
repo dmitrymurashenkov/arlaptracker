@@ -26,25 +26,54 @@
                 on some frames based on maxDetectionRate. After our tests we found out that lower maxDetectionRate
                 dramatically improves fps and seems to result in less missed markers.
 
-                Since usb video receivers output 640x480 and original PAL resolution is 720x576 we stick to
-                desktop-normal profile with maxDetectionRate of 10. This gives good performance with 4 videos on screen.
+                Since usb video receivers output 640x480 and original PAL resolution is 720x576 desktop-normal profile
+                with maxDetectionRate of 10 should be optimal. On a fast PC it gives about 20-25 fps with 4 videos on
+                screen and phone-slow don't really add that much with 4 videos, but in reality - not much difference
+                between the two so either can be used.
+
+                TODO There is a degradation of performance after a long run. Sometimes eveything is slow (15fps) right
+                away and closing other unrelated browser tabs helps - needs research.
 
                 To check performance - add 'stats' attribute on <a-scene> - it will draw debug info.
 
-                TODO test NFT marker detection
+                Pattern ratio is white marker area side length divided by black side length and is 0.66 for TinyViewPlus
+                ArUco markers. Seems no difference between 0.5 and 0.66 - the algorithm just needs a thick black border
+                around the marker itself.
+
+                It seems that number of markers don't affect detection performance.
              -->
-            <a-scene arjs='detectionMode: mono_and_matrix; matrixCodeType: 4x4_BCH_13_9_3; performanceProfile: desktop-normal; maxDetectionRate: 10;' vr-mode-ui="enabled: false;">
+            <a-scene arjs='detectionMode: mono; performanceProfile: phone-slow; maxDetectionRate: 10; patternRatio: 0.66' vr-mode-ui="enabled: false;">
                 <!--
                 For testing purposes we can record screen, put it to ./video.webm and load this page
                 with different marker settings to see if it enhances detection
                 -->
             <!--<a-scene arjs='detectionMode: mono_and_matrix; matrixCodeType: 4x4_BCH_13_9_3; sourceType: video; sourceUrl: video.webm' vr-mode-ui="enabled: false;">-->
 
-                <!-- We took standard marker and generated pattern for it - seems pattern works a bit better than the marker itself! -->
-                <a-marker id="finish-marker" preset="pattern" type="pattern" url="markers/marker-4x4_bch_13_9_3-value-22.patt" showdistance finishmarker>
+                <a-marker preset="pattern" type="pattern" url="markers/tinyviewplus-marker_00_main_a.patt" showdistance finishmarker>
 
                     <a-box color="blue" depth="1" height="1" width="1" opacity="0.5"></a-box>
-                    <a-text id="finish-marker-distance" value="Hello world" font="roboto" width="40" transparent="false" billboard></a-text>
+                    <a-text value="Hello world" font="roboto" width="40" transparent="false" billboard></a-text>
+
+                </a-marker>
+
+                <a-marker preset="pattern" type="pattern" url="markers/tinyviewplus-marker_01_main_b.patt" showdistance finishmarker>
+
+                    <a-box color="green" depth="1" height="1" width="1" opacity="0.5"></a-box>
+                    <a-text value="Hello world" font="roboto" width="40" transparent="false" billboard></a-text>
+
+                </a-marker>
+
+                <a-marker preset="pattern" type="pattern" url="markers/tinyviewplus-marker_02_main_c.patt" showdistance finishmarker>
+
+                    <a-box color="yellow" depth="1" height="1" width="1" opacity="0.5"></a-box>
+                    <a-text value="Hello world" font="roboto" width="40" transparent="false" billboard></a-text>
+
+                </a-marker>
+
+                <a-marker preset="pattern" type="pattern" url="markers/tinyviewplus-marker_03_main_d.patt" showdistance finishmarker>
+
+                    <a-box color="pink" depth="1" height="1" width="1" opacity="0.5"></a-box>
+                    <a-text value="Hello world" font="roboto" width="40" transparent="false" billboard></a-text>
 
                 </a-marker>
 

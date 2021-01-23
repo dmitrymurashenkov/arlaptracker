@@ -24,12 +24,28 @@ function heuristicScale(meters) {
     return meters*heuristicScale;
 }
 
+var visibleMarkers = [];
+
 AFRAME.registerComponent('finishmarker', {
     init: function () {
         var marker = this.el;
 
+        marker.addEventListener('markerFound', function () {
+            visibleMarkers.push(marker);
+        });
+
         marker.addEventListener('markerLost', function () {
-            checkLapFinished(marker);
+            visibleMarkers = visibleMarkers.filter(item => item !== marker)
+            //Since we have several different markers and each may stop being
+            //recognized in the process - we need to wait till they all go away
+            //and treat this moment as passing the finish line.
+            //
+            //If there is one marker printed several times - AR.js treats it as one
+            //and will recognized only one of the two (one that is larger or better
+            //visible) and will only emit lost event when both are not recognized.
+            if (visibleMarkers.length === 0) {
+                checkLapFinished(marker);
+            }
         });
     },
 });
