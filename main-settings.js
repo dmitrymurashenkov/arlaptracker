@@ -52,9 +52,8 @@ function settingsToUrl() {
         if (iframe.contentWindow.camerasLoaded) {
             let cameraDeviceSelect = iframe.contentDocument.querySelector('#cameraDevice');
             let pilotName = iframe.contentDocument.querySelector('#pilotName').value;
-            let cameraDevice = (cameraDeviceSelect.selectedOptions.length === 0) ? "" : cameraDeviceSelect.selectedOptions[0].value;
 
-            pilots.push(pilotName + ":" + cameraDevice);
+            pilots.push(pilotName + ":" + cameraDeviceSelect.selectedIndex);
         }
     }
 
@@ -91,11 +90,11 @@ function urlToSettings() {
         for (let i = 0; i < pilots.length; i++) {
             let pilot = pilots[i];
             if (pilot !== "") {
-                let nameDevice = pilot.split(':');
-                let pilotName = nameDevice[0];
-                let cameraDevice = nameDevice.length > 1 ? nameDevice[1] : null;
+                let nameAndCamera = pilot.split(':');
+                let pilotName = nameAndCamera[0];
+                let cameraDeviceIndex = nameAndCamera.length > 1 ? nameAndCamera[1] : null;
 
-                addPilot(pilotName, cameraDevice);
+                addPilot(pilotName, cameraDeviceIndex);
             }
         }
     }

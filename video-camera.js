@@ -71,15 +71,16 @@ function urlToVideoSettings() {
     var searchParams = new URLSearchParams(window.location.search);
 
     let pilotName = searchParams.get("pilotName");
-    let cameraDevice = searchParams.get("cameraDevice");
+    let cameraDeviceIndex = searchParams.get("cameraDeviceIndex");
 
     if (pilotName && pilotName !== "") {
         document.querySelector('#pilotName').value = pilotName;
     }
-    if (cameraDevice && cameraDevice !== "") {
-        let cameraOption = document.querySelector('#cameraDevice option[value="' + cameraDevice + '"]');
-        if (cameraOption) {
-            cameraOption.selected = true;
+    if (cameraDeviceIndex && cameraDeviceIndex !== "") {
+        let cameraSelect = document.querySelector('#cameraDevice');
+        //There is always Remove pilot option in the list even if no cameras present
+        if (cameraSelect.length > 1 && cameraDeviceIndex < cameraSelect.length - 1) {
+            cameraSelect.selectedIndex = cameraDeviceIndex;
         }
     }
     onCameraSelected();

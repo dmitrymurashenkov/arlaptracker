@@ -5,12 +5,12 @@ function removePilot(iframeId) {
     settingsToUrl();
 }
 
-function addPilot(pilotName, cameraDevice) {
+function addPilot(pilotName, cameraDeviceIndex) {
     if (!race.started) {
         pilotName = pilotName || "Pilot1";
         let url = "video.html?pilotName=" + pilotName;
-        if (cameraDevice) {
-            url += "&cameraDevice=" + cameraDevice;
+        if (cameraDeviceIndex) {
+            url += "&cameraDeviceIndex=" + cameraDeviceIndex;
         }
 
         let addPilotButton = document.querySelector('.add-pilot-button');
