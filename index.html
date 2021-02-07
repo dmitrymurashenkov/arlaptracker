@@ -54,6 +54,12 @@
             </div>
 
             <div class="setting-panel">
+                <div class="setting-name">Min frames with marker:</div>
+                <input id="minFramesWithMarker" type="text" value="5" size="4" oninput="applySettings()">
+                <div class="setting-units"> seconds</div>
+            </div>
+
+            <div class="setting-panel">
                 <div class="setting-name">Record video:</div>
                 <input id="recordVideo" type="checkbox" style="margin: 0" oninput="applySettings()">
             </div>
@@ -134,6 +140,13 @@
 
                 <p><b>Min lap time</b> - set min lap time to ignore cases when pilot got stuck near the finish
                     gate for some time. Adjust it it the actual length of your track.</p>
+
+                <p><b>Min frames with marker</b> - marker must be detected in this number of consecutive frames
+                in order for lap to be tracked (if frame 1 has marker A and frame 2 has marker B - we treat it as 2
+                consecutive detections). Sometimes marker patterns are erroneously detected in FPV noise, usually in
+                only a single frame. To avoid triggering lap finished check in these cases we use this setting. Min
+                value should be 2, but we use 3 as the default for safety. If you don't mind false positives - feel
+                free to set it to 1.</p>
 
                 <p><b>Record video</b> - in case of any lap counter errors we want to record video to be able to
                     correct manually after the race. If this option is checked - you'll be asked to choose the

@@ -2,6 +2,7 @@ var settings = {
     markerSizeMeters: 0.16,
     minMarkerDistanceMeters: 1.5,
     minLapTimeSeconds: 5,
+    minFramesWithMarker: 3,
     recordVideo: true,
     coundownMinSeconds: 3,
     coundownMaxSeconds: 3
@@ -21,6 +22,7 @@ function displaySettings() {
     document.querySelector("#recordVideo").checked = settings.recordVideo === true || settings.recordVideo === 'true';
     document.querySelector("#coundownMinSeconds").value = settings.coundownMinSeconds;
     document.querySelector("#coundownMaxSeconds").value = settings.coundownMaxSeconds;
+    document.querySelector("#minFramesWithMarker").value = settings.minFramesWithMarker;
 }
 
 function applySettings() {
@@ -30,6 +32,7 @@ function applySettings() {
     settings.recordVideo = document.querySelector("#recordVideo").checked;
     settings.coundownMinSeconds = document.querySelector("#coundownMinSeconds").value;
     settings.coundownMaxSeconds = document.querySelector("#coundownMaxSeconds").value;
+    settings.minFramesWithMarker = document.querySelector("#minFramesWithMarker").value;
 
     settingsToUrl();
 }
@@ -43,6 +46,7 @@ function settingsToUrl() {
     searchParams.set("recordVideo", settings.recordVideo);
     searchParams.set("coundownMinSeconds", settings.coundownMinSeconds);
     searchParams.set("coundownMaxSeconds", settings.coundownMaxSeconds);
+    searchParams.set("minFramesWithMarker", settings.minFramesWithMarker);
 
     let pilots = [];
     let iframes = document.querySelectorAll('iframe');
@@ -76,13 +80,16 @@ function urlToSettings() {
         settings.minLapTimeSeconds = searchParams.get("minLapTimeSeconds");
     }
     if (searchParams.get("recordVideo")) {
-        settings.recordVideo = searchParams.get("recordVideo");
+        settings.recordVideo = searchParams.get("recordVideo") === 'true';
     }
     if (searchParams.get("coundownMinSeconds")) {
         settings.coundownMinSeconds = searchParams.get("coundownMinSeconds");
     }
     if (searchParams.get("coundownMaxSeconds")) {
         settings.coundownMaxSeconds = searchParams.get("coundownMaxSeconds");
+    }
+    if (searchParams.get("minFramesWithMarker")) {
+        settings.minFramesWithMarker = searchParams.get("minFramesWithMarker");
     }
 
     if (searchParams.get('pilots')) {

@@ -16,7 +16,7 @@ See Help section in the app for details.
 
 This tool was inspired by [TinyViewPlus](https://github.com/t-asano/tinyviewplus) which works with 
 similar accuracy, but requires installation. However AR lap tracker is planned to be more feature-rich - 
-stay tuned for the updates!
+stay tuned for updates!
 
 AR Lap timer uses [AR.js](https://github.com/AR-js-org/AR.js) for marker recognition.
 

@@ -1,17 +1,22 @@
 let counter = 1;
 
 function removePilot(iframeId) {
-    document.querySelector('#' + iframeId).remove();
+    document.querySelector('#' + iframeId).parentElement.remove();
     settingsToUrl();
+}
+
+function buildIframeUrl(pilotName, cameraDeviceIndex) {
+    pilotName = pilotName || "Pilot1";
+    let url = "video.html?pilotName=" + pilotName;
+    if (cameraDeviceIndex) {
+        url += "&cameraDeviceIndex=" + cameraDeviceIndex;
+    }
+    return url;
 }
 
 function addPilot(pilotName, cameraDeviceIndex) {
     if (!race.started) {
-        pilotName = pilotName || "Pilot1";
-        let url = "video.html?pilotName=" + pilotName;
-        if (cameraDeviceIndex) {
-            url += "&cameraDeviceIndex=" + cameraDeviceIndex;
-        }
+        url = buildIframeUrl(pilotName, cameraDeviceIndex);
 
         let addPilotButton = document.querySelector('.add-pilot-button');
         addPilotButton.insertAdjacentHTML('beforebegin',

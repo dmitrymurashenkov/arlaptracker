@@ -1,6 +1,6 @@
 var camerasLoaded = false;
 
-window.addEventListener('arjs-video-loaded', (event) => {
+window.addEventListener('load', function () {
     loadCameraDevices(document.querySelector('#cameraDevice'));
 });
 
@@ -20,11 +20,15 @@ function loadCameraDevices(dropdownElement) {
                     dropdownElement.insertAdjacentHTML('beforeend', '<option ' + selected + ' value="' + device.deviceId + '">' + device.label + '</option>');
                 }
             }
+            if (firstCamera) {
+                alert('No cameras found - please connect USB FPV receiver!');
+            }
             dropdownElement.insertAdjacentHTML('beforeend', '<option value="">Remove pilot</option>');
             camerasLoaded = true;
             urlToVideoSettings();
-            //Seems if we call urlToVideoSettings() then no need to dispatch event
-            //dropdownElement.dispatchEvent(new Event('change'));
+            window.parent.settingsToUrl();
+            //ThreeJS will take selected camera
+            initThreeJS();
         })
         .catch(function (err) {
             console.log('Failed to list available camera devices', err);
@@ -35,31 +39,15 @@ function loadCameraDevices(dropdownElement) {
 function onCameraSelected() {
     let devicesDropdown = document.querySelector('#cameraDevice');
 
-    var arjsVideo = document.querySelector("#arjs-video");
-
-    var oldStream = arjsVideo.srcObject;
-    oldStream.getTracks().forEach(function (track) {
-        track.stop();
-    });
-
+    let cameraChanged = false;
     if (devicesDropdown.value) {
-        var constraints = {
-            audio: false,
-            video: {
-                deviceId: {
-                    exact: devicesDropdown.value
-                },
-            },
-        };
-
-        navigator.mediaDevices.getUserMedia(constraints)
-            .then(function success(stream) {
-                arjsVideo.srcObject = stream;
-
-                //reinit arjs
-                var event = new CustomEvent("camera-init", {stream: stream});
-                window.dispatchEvent(event);
-            });
+        queueMicrotask(() => {
+            //Reload whole iframe to apply changes
+            window.location.href = window.parent.buildIframeUrl(
+                document.querySelector('#pilotName').value,
+                document.querySelector('#cameraDevice').selectedIndex
+            );
+        })
     }
     else {
         window.parent.removePilot(window.frameElement.id);
@@ -83,5 +71,4 @@ function urlToVideoSettings() {
             cameraSelect.selectedIndex = cameraDeviceIndex;
         }
     }
-    onCameraSelected();
 }

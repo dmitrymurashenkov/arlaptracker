@@ -1,14 +1,11 @@
 var currentLapStartTime;
 var currentLapNumber;
 
-function checkLapFinished(marker) {
+function checkLapFinished(metersToMarker, lapFinishTime) {
     if (window.parent.race.startTime) {
 
-        let distanceToMarker = heuristicScale(toMeters(marker.object3D.position.length()));
-
-        if (distanceToMarker < window.parent.settings.minMarkerDistanceMeters) {
+        if (metersToMarker < window.parent.settings.minMarkerDistanceMeters) {
             //We were close to marker - seems we've just finished our lap
-            let lapFinishTime = new Date();
             let splitSeconds = (lapFinishTime - window.parent.race.startTime.getTime()) / 1000;
             let lapTimeSeconds = (lapFinishTime.getTime() - currentLapStartTime.getTime()) / 1000;
 
