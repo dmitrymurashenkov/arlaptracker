@@ -14,27 +14,33 @@ function heuristicScale(meters) {
     return meters/2.7;
 }
 
+var threeRenderer;
+var threeScene;
+
 function initThreeJS() {
 
     let cameraDeviceId = document.querySelector('#cameraDevice').value;
     ARController.getUserMediaThreeScene({
-        maxARVideoSize: 320,
+        // maxARVideoSize: 320,
+        maxARVideoSize: 640,
         deviceId: cameraDeviceId,
         cameraParam: 'lib/camera_para-iPhone 5 rear 640x480 1.0m.dat',
         onSuccess: function(arScene, arController, arCamera) {
+
+            threeScene = arScene;
 
             document.body.className = arController.orientation;
 
             // arController.setPatternDetectionMode(artoolkit.AR_MATRIX_CODE_DETECTION);
             arController.setPatternDetectionMode(artoolkit.AR_TEMPLATE_MATCHING_MONO);
 
-            var renderer = new THREE.WebGLRenderer({antialias: true});
+            threeRenderer = new THREE.WebGLRenderer({antialias: true});
 
-            renderer.setSize(arController.videoWidth, arController.videoHeight);
+            threeRenderer.setSize(arController.videoWidth, arController.videoHeight);
 
-            document.querySelector('body').append(renderer.domElement);
+            document.querySelector('body').append(threeRenderer.domElement);
             //Default styles have fixed width-height
-            renderer.domElement.style = '';
+            threeRenderer.domElement.style = '';
 
             addMarker(arController, arScene, "markers/tinyviewplus-marker_00_main_a.patt", 0x0000ff);
             addMarker(arController, arScene, "markers/tinyviewplus-marker_01_main_b.patt", 0xFFB6C1);
@@ -43,7 +49,7 @@ function initThreeJS() {
 
             var tick = function() {
                 arScene.process();
-                arScene.renderOn(renderer);
+                arScene.renderOn(threeRenderer);
 
                 ticks++;
 
@@ -70,9 +76,19 @@ function checkMarkerLost(markerRoot) {
             anyVisible = true;
             let distance = metersToMarker(markerRoot);
 
+            let distanceXY = toScreenPosition(markerRoot, threeScene.camera);
+            markerRoot.distanceDiv.hidden = false;
+            markerRoot.distanceDiv.style.left = distanceXY.x + "px";
+            markerRoot.distanceDiv.style.top = distanceXY.y + "px";
+            markerRoot.distanceDiv.style.top = distanceXY.y + "px";
+            markerRoot.distanceDiv.innerHTML = distance + "m";
+
             if (distance < minDistance) {
                 minDistance = distance;
             }
+        }
+        else {
+            markerRoot.distanceDiv.hidden = true;
         }
     }
 
@@ -81,6 +97,7 @@ function checkMarkerLost(markerRoot) {
         markerLastSeenTime = new Date();
         pendingLapFinished = false;
         consecutiveDetects++;
+        console.log('consecutiveDetects', consecutiveDetects)
     } else {
         //Markers are often erroneously found in fpv noise, so we try to avoid it by checking
         //that many frames saw marker recently. It's better to check that we saw same marker,
@@ -91,8 +108,10 @@ function checkMarkerLost(markerRoot) {
             //but then be detected again. So we remember that we've just lost it and if it doesn't
             //reappear soon - we'll trigger lap finish check.
             pendingLapFinished = true;
+            console.log('pendingLapFinished distance', markerLastDistance)
         }
         if (pendingLapFinished && (new Date().getTime() - markerLastSeenTime.getTime()) > 1000) {
+            console.log('checkLapFinished')
             checkLapFinished(markerLastDistance, markerLastSeenTime);
             pendingLapFinished = false;
             markerLastDistance = 9999999999;
@@ -132,6 +151,40 @@ function addMarker(arController, arScene, patternFile, color) {
             arScene.scene.add(markerRoot);
 
             markerRoots.push(markerRoot);
+
+            var distanceDiv = document.createElement("div");
+            distanceDiv.hidden = true;
+            distanceDiv.style.position = 'fixed';
+            distanceDiv.style.top = '0';
+            distanceDiv.style.left = '0';
+            distanceDiv.style.color = 'white';
+            distanceDiv.style.fontSize = '50';
+            distanceDiv.style.fontWeight = '600';
+            distanceDiv.innerHTML = "Distance to marker here!";
+            markerRoot.distanceDiv = distanceDiv;
+
+            document.body.append(distanceDiv);
         }
     );
+}
+
+function toScreenPosition(obj, camera)
+{
+    var vector = new THREE.Vector3();
+
+    var widthHalf = 0.5*threeRenderer.context.canvas.width;
+    var heightHalf = 0.5*threeRenderer.context.canvas.height;
+
+    obj.updateMatrixWorld();
+    vector.setFromMatrixPosition(obj.matrixWorld);
+    vector.project(camera);
+
+    vector.x = ( vector.x * widthHalf ) + widthHalf;
+    vector.y = - ( vector.y * heightHalf ) + heightHalf;
+
+    return {
+        x: vector.x,
+        y: vector.y
+    };
+
 }

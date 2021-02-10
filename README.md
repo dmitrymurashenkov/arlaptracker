@@ -18,14 +18,16 @@ This tool was inspired by [TinyViewPlus](https://github.com/t-asano/tinyviewplus
 similar accuracy, but requires installation. However AR lap tracker is planned to be more feature-rich - 
 stay tuned for updates!
 
-AR Lap timer uses [AR.js](https://github.com/AR-js-org/AR.js) for marker recognition.
+AR Lap timer uses [Three.js](https://github.com/mrdoob/three.js/) and 
+[jsartoolkit5](https://github.com/artoolkitx/jsartoolkit5) for marker recognition.
 
 **Roadmap:**
 
-- Fix distance calculation to marker (depends on https://github.com/AR-js-org/AR.js/issues/36)
 - Check marker rotation to be able to point it to gates center and avoid registering lap if drone passed 
   outside the gates (possible bad idea - may lower recognition accuracy)
 - Remove mouse cursor from the recording (not possible in Chrome currently)
+- Add separate marker for sector within lap measuring 
+- Add per pilot lap display (usefull if there are many laps)
 - Test with mobile devices
 
 **Contact:**
